@@ -9,14 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.35.1",
+    "@trpc/client": "^11.0.0-rc.364",
+    "@trpc/next": "^11.0.0-rc.364",
+    "@trpc/react-query": "^11.0.0-rc.364",
+    "@trpc/server": "^11.0.0-rc.364",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.378.0",
     "next": "14.2.3",
+    "next-intl": "^3.12.2",
     "react": "^18",
     "react-dom": "^18",
+    "superjson": "^2.2.1",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.6"
   },
   "devDependencies": {
     "@types/node": "^20",
