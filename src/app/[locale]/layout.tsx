@@ -1,21 +1,26 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Locale } from '@/config/i18n.config'
 import '@/styles/globals.css'
+import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
+import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: 'Breadit | Dario Tried Coding',
-  description: 'Breadit: Una replica di Reddit realizzata con Next.js e Supabase.',
+type Props = {
+  children: React.ReactNode
+  params: { locale: Locale }
 }
 
-export default function RootLayout({
-  children,
-  params: { locale },
-}: Readonly<{
-  children: React.ReactNode
-  params: { locale: string }
-}>) {
+export async function generateMetadata({ params: { locale } }: Omit<Props, 'children'>) {
+  const t = await getTranslations({ locale, namespace: 'Project.Metadata' })
+
+  return {
+    title: t('title'),
+    description: t('description')
+  } as Metadata
+}
+
+export default function RootLayout({ children, params: { locale } }: Props) {
   return (
     <html lang={locale}>
       <body className={inter.className}>{children}</body>

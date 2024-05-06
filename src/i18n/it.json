@@ -6,5 +6,11 @@
     "Errors": {
       "unauthorized": "Devi aver eseguito l'accesso."
     }
+  },
+  "Project": {
+    "Metadata": {
+      "title": "Breadit | Dario Tried Coding",
+      "description": "Breadit: replica di Reddit realizzata con Next.js e TypeScript."
+    }
   }
 }
