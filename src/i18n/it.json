@@ -5,6 +5,10 @@
   "Auth": {
     "Errors": {
       "unauthorized": "Devi aver eseguito l'accesso."
+    },
+    "CTA": {
+      "sign-in": "Accedi",
+      "sign-up": "Registrati"
     }
   },
   "Project": {

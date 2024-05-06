@@ -103,7 +103,6 @@
 
     --background: var(--zinc-50);
     --foreground: var(--zinc-950);
-    --navigation: var(--zinc-50);
     --primary: var(--zinc-900);
     --primary-foreground: var(--zinc-50);
     --secondary: var(--zinc-100);
@@ -149,19 +148,6 @@
     --foreground-900: var(--zinc-900);
     --foreground-950: var(--zinc-950);
     --foreground-1000: var(--zinc-1000);
-
-    --navigation-50: var(--zinc-50);
-    --navigation-100: var(--zinc-100);
-    --navigation-200: var(--zinc-200);
-    --navigation-300: var(--zinc-300);
-    --navigation-400: var(--zinc-400);
-    --navigation-500: var(--zinc-500);
-    --navigation-600: var(--zinc-600);
-    --navigation-700: var(--zinc-700);
-    --navigation-800: var(--zinc-800);
-    --navigation-900: var(--zinc-900);
-    --navigation-950: var(--zinc-950);
-    --navigation-1000: var(--zinc-1000);
 
     --primary-50: var(--brand-50);
     --primary-100: var(--brand-100);

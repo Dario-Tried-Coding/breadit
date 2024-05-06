@@ -12,4 +12,7 @@ export const {
   adapter: PrismaAdapter(db),
   session: { strategy: 'jwt' },
   providers: [Google],
+  pages: {
+    signIn: '/sign-in',
+  }
 })

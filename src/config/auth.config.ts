@@ -1,0 +1,1 @@
+export const REDIRECT_URL_PARAM = 'redirectUrl' as const

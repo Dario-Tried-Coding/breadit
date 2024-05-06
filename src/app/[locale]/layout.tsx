@@ -1,4 +1,7 @@
+import Navbar from '@/components/Navbar'
+import Providers from '@/components/providers/Providers.server'
 import { Locale } from '@/config/i18n.config'
+import { cn } from '@/lib/utils'
 import '@/styles/globals.css'
 import { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
@@ -16,14 +19,19 @@ export async function generateMetadata({ params: { locale } }: Omit<Props, 'chil
 
   return {
     title: t('title'),
-    description: t('description')
+    description: t('description'),
   } as Metadata
 }
 
 export default function RootLayout({ children, params: { locale } }: Props) {
   return (
     <html lang={locale}>
-      <body className={inter.className}>{children}</body>
+      <body className={cn(inter.className, 'antialiased min-h-[200vh]')}>
+        <Providers locale={locale}>
+          <Navbar />
+          {children}
+        </Providers>
+      </body>
     </html>
   )
 }

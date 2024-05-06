@@ -6,9 +6,9 @@ import { httpBatchLink } from '@trpc/client'
 import { FC, PropsWithChildren, useState } from 'react'
 import superjson from 'superjson'
 
-interface ClientProvidersProps extends PropsWithChildren {}
+interface ProvidersProps extends PropsWithChildren {}
 
-const ClientProviders: FC<ClientProvidersProps> = ({ children }) => {
+const Providers: FC<ProvidersProps> = ({ children }) => {
   const [queryClient] = useState(() => new QueryClient())
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -28,4 +28,4 @@ const ClientProviders: FC<ClientProvidersProps> = ({ children }) => {
   )
 }
 
-export default ClientProviders
+export default Providers

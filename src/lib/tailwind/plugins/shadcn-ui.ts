@@ -10,7 +10,7 @@ export const shadcnPlugin = plugin(
     addBase({ ':root': { '--radius': '0.5rem' } })
     addBase({
       '*': { '@apply border-border': {} },
-      body: { '@apply bg-background text-foreground': {} },
+      body: { '@apply bg-slate-50 text-foreground': {} },
     })
     addUtilities({})
   },
@@ -19,7 +19,7 @@ export const shadcnPlugin = plugin(
       container: {
         center: true,
         padding: {
-          DEFAULT: '2rem',
+          DEFAULT: '1rem',
         },
         screens: {
           '2xl': '1400px',
@@ -156,21 +156,6 @@ export const shadcnPlugin = plugin(
             900: withOpacity('--foreground-900'),
             950: withOpacity('--foreground-950'),
             1000: withOpacity('--foreground-1000'),
-          },
-          navigation: {
-            DEFAULT: withOpacity('--navigation'),
-            50: withOpacity('--navigation-50'),
-            100: withOpacity('--navigation-100'),
-            200: withOpacity('--navigation-200'),
-            300: withOpacity('--navigation-300'),
-            400: withOpacity('--navigation-400'),
-            500: withOpacity('--navigation-500'),
-            600: withOpacity('--navigation-600'),
-            700: withOpacity('--navigation-700'),
-            800: withOpacity('--navigation-800'),
-            900: withOpacity('--navigation-900'),
-            950: withOpacity('--navigation-950'),
-            1000: withOpacity('--navigation-1000'),
           },
           primary: {
             DEFAULT: withOpacity('--primary'),
