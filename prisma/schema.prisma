@@ -7,6 +7,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Vote {
+  UP
+  DOWN
+}
+
 model User {
   id            String          @id @default(cuid())
   name          String?
@@ -14,6 +19,16 @@ model User {
   emailVerified DateTime?
   image         String?
   accounts      Account[]
+
+  createdSubreddits Subreddit[] @relation("SubredditCreator")
+  subscribedSubreddits Subreddit[] @relation("SubredditSubscribers")
+
+  posts Post[]
+
+  postVotes PostVote[]
+
+  comments Comment[]
+  commentVotes CommentVote[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -38,4 +53,83 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
+}
+
+model Subreddit {
+  id String @id @default(cuid())
+  name String
+
+  creatorId String
+  creator User @relation("SubredditCreator", fields: [creatorId], references: [id])
+
+  subscribers User[] @relation("SubredditSubscribers")
+
+  posts Post[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id String @id @default(cuid())
+  title String
+  content Json
+
+  subredditId String
+  subreddit Subreddit @relation(fields: [subredditId], references: [id])
+
+  authorId String
+  author User @relation(fields: [authorId], references: [id])
+
+  votes PostVote[]
+
+  comments Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PostVote {
+  postId String
+  post Post @relation(fields: [postId], references: [id])
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  vote Int
+
+  @@id([postId, userId])
+}
+
+model Comment {
+  id String @id @default(cuid())
+  content String
+
+  postId String
+  post Post @relation(fields: [postId], references: [id])
+
+  authorId String
+  author User @relation(fields: [authorId], references: [id])
+
+  replyToId String?
+  replyTo Comment? @relation("replyTo", fields: [replyToId], references: [id])
+
+  replies Comment[] @relation("replyTo")
+
+  votes CommentVote[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CommentVote {
+  commentId String
+  comment Comment @relation(fields: [commentId], references: [id])
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  vote Int
+
+  @@id([commentId, userId])
 }
