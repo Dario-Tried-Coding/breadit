@@ -1,5 +1,10 @@
 {
   "Index": {
     "title": "Ciao mondo!"
+  },
+  "Auth": {
+    "Errors": {
+      "unauthorized": "Devi aver eseguito l'accesso."
+    }
   }
 }
