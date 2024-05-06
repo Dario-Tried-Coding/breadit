@@ -6,5 +6,5 @@ export default auth((req) => {
 })
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)', '/([\\w-]+)?/users/(.+)'],
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
 }

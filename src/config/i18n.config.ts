@@ -1,6 +1,6 @@
 export const i18nConfig = {
   defaultLocale: 'it',
-  locales: ['en', 'it'],
+  locales: ['it'],
   localePrefix: 'never',
   cookie: 'NEXT_LOCALE',
 } as const
