@@ -28,13 +28,29 @@
     "Metadata": {
       "title": "Breadit | Dario Tried Coding",
       "description": "Breadit: replica di Reddit realizzata con Next.js e TypeScript."
-    }
+    },
+    "title": "Breadit"
   },
   "Pages": {
     "Auth": {
       "Sign-in": {
         "heading": "Che bello rivederti!",
         "subheading": "Continuando, accetti i nostri Termini di servizio e la nostra Informativa sulla privacy."
+      }
+    }
+  },
+  "Components": {
+    "Navbar": {
+      "UserAccountNav": {
+        "Trigger": {
+          "alt": "Avatar dell'utente"
+        },
+        "Content": {
+          "feed": "Feed",
+          "create-community": "Crea una community",
+          "settings": "Impostazioni",
+          "sign-out": "Esci"
+        }
       }
     }
   }
