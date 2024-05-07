@@ -1,20 +1,41 @@
 {
   "Index": {
-    "title": "Ciao mondo!"
+    "title": "Ciao mondo!",
+    "Link": {
+      "home": "Home"
+    }
   },
   "Auth": {
     "Errors": {
-      "unauthorized": "Devi aver eseguito l'accesso."
+      "unauthorized": "Devi aver eseguito l'accesso.",
+      "already-signed-in": "Hai già eseguito l'accesso.",
+      "social-auth-error": "Non è stato possibile eseguire l'accesso con {provider}.",
+      "Toast": {
+        "title": "C'è stato un errore"
+      }
     },
     "CTA": {
       "sign-in": "Accedi",
       "sign-up": "Registrati"
+    },
+    "Providers": {
+      "Google": {
+        "name": "Google"
+      }
     }
   },
   "Project": {
     "Metadata": {
       "title": "Breadit | Dario Tried Coding",
       "description": "Breadit: replica di Reddit realizzata con Next.js e TypeScript."
+    }
+  },
+  "Pages": {
+    "Auth": {
+      "Sign-in": {
+        "heading": "Che bello rivederti!",
+        "subheading": "Continuando, accetti i nostri Termini di servizio e la nostra Informativa sulla privacy."
+      }
     }
   }
 }

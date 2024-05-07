@@ -1,13 +1,13 @@
-import { SignIn } from '@/components/AuthLinks'
+import { SignIn } from '@/components/auth/AuthLinks'
 import { Icons } from '@/components/Icons'
-import { auth } from '@/lib/next-auth'
 import { Link } from '@/lib/next-intl/navigation'
 import { FC } from 'react'
+import { getAuthSession } from '@/lib/next-auth/cache'
 
 interface NavbarProps {}
 
 const Navbar: FC<NavbarProps> = async ({}) => {
-  const session = await auth()
+  const session = await getAuthSession()
 
   return (
     <div className='fixed inset-x-0 top-0 h-12 border-b bg-background-100'>

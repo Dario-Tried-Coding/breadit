@@ -14,7 +14,7 @@ const SignIn = ({ className, size, variant, ...props }: SignInProps) => {
   const t = useTranslations('Auth.CTA')
 
   return (
-    <Link href={`/api/auth/signin?${REDIRECT_URL_PARAM}=${pathname}`} className={cn(buttonVariants({ size, variant }), className)} {...props}>
+    <Link href={`/sign-in?${REDIRECT_URL_PARAM}=${pathname}`} className={cn(buttonVariants({ size, variant }), className)} {...props}>
       {t('sign-in')}
     </Link>
   )
@@ -26,7 +26,7 @@ const SignOut = ({ className, size, variant, ...props }: SignOutProps) => {
   const t = useTranslations('Auth.CTA')
 
   return (
-    <Link href={`/api/auth/signin?${REDIRECT_URL_PARAM}=${pathname}`} className={cn(buttonVariants({ size, variant }), className)} {...props}>
+    <Link href={`/sign-in?${REDIRECT_URL_PARAM}=${pathname}`} className={cn(buttonVariants({ size, variant }), className)} {...props}>
       {t('sign-up')}
     </Link>
   )

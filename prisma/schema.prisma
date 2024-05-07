@@ -13,25 +13,27 @@ enum Vote {
 }
 
 model User {
-  id            String          @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String          @unique
+  email         String    @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
 
-  createdSubreddits Subreddit[] @relation("SubredditCreator")
+  createdSubreddits    Subreddit[] @relation("SubredditCreator")
   subscribedSubreddits Subreddit[] @relation("SubredditSubscribers")
 
   posts Post[]
 
   postVotes PostVote[]
 
-  comments Comment[]
+  comments     Comment[]
   commentVotes CommentVote[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  Session   Session[]
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Account {
@@ -55,12 +57,30 @@ model Account {
   @@id([provider, providerAccountId])
 }
 
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
 model Subreddit {
-  id String @id @default(cuid())
+  id   String @id @default(cuid())
   name String
 
   creatorId String
-  creator User @relation("SubredditCreator", fields: [creatorId], references: [id])
+  creator   User   @relation("SubredditCreator", fields: [creatorId], references: [id])
 
   subscribers User[] @relation("SubredditSubscribers")
 
@@ -71,15 +91,15 @@ model Subreddit {
 }
 
 model Post {
-  id String @id @default(cuid())
-  title String
+  id      String @id @default(cuid())
+  title   String
   content Json
 
   subredditId String
-  subreddit Subreddit @relation(fields: [subredditId], references: [id])
+  subreddit   Subreddit @relation(fields: [subredditId], references: [id])
 
   authorId String
-  author User @relation(fields: [authorId], references: [id])
+  author   User   @relation(fields: [authorId], references: [id])
 
   votes PostVote[]
 
@@ -91,10 +111,10 @@ model Post {
 
 model PostVote {
   postId String
-  post Post @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id])
 
   userId String
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   vote Int
 
@@ -102,17 +122,17 @@ model PostVote {
 }
 
 model Comment {
-  id String @id @default(cuid())
+  id      String @id @default(cuid())
   content String
 
   postId String
-  post Post @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id])
 
   authorId String
-  author User @relation(fields: [authorId], references: [id])
+  author   User   @relation(fields: [authorId], references: [id])
 
   replyToId String?
-  replyTo Comment? @relation("replyTo", fields: [replyToId], references: [id])
+  replyTo   Comment? @relation("replyTo", fields: [replyToId], references: [id])
 
   replies Comment[] @relation("replyTo")
 
@@ -124,10 +144,10 @@ model Comment {
 
 model CommentVote {
   commentId String
-  comment Comment @relation(fields: [commentId], references: [id])
+  comment   Comment @relation(fields: [commentId], references: [id])
 
   userId String
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   vote Int
 

@@ -1,8 +1,8 @@
 import SignoutBtn from '@/components/SignoutBtn'
-import { auth } from '@/lib/next-auth'
+import {getAuthSession} from '@/lib/next-auth/cache'
 
 export default async function Home() {
-  const session = await auth()
+  const session = await getAuthSession()
   return (
     <main>
       {JSON.stringify(session?.user)}

@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar'
 import Providers from '@/components/providers/Providers.server'
+import { Toaster } from '@/components/ui/Toaster'
 import { Locale } from '@/config/i18n.config'
 import { cn } from '@/lib/utils'
 import '@/styles/globals.css'
@@ -26,10 +27,11 @@ export async function generateMetadata({ params: { locale } }: Omit<Props, 'chil
 export default function RootLayout({ children, params: { locale } }: Props) {
   return (
     <html lang={locale}>
-      <body className={cn(inter.className, 'antialiased min-h-[200vh]')}>
+      <body className={cn(inter.className, 'antialiased min-h-screen')}>
         <Providers locale={locale}>
           <Navbar />
-          {children}
+          <Toaster />
+          <div className='pt-12'>{children}</div>
         </Providers>
       </body>
     </html>
