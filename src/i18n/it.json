@@ -11,7 +11,11 @@
       "already-signed-in": "Hai già eseguito l'accesso.",
       "social-auth-error": "Non è stato possibile eseguire l'accesso con {provider}.",
       "Toast": {
-        "title": "C'è stato un errore"
+        "title": "C'è stato un errore",
+        "SignInToast": {
+          "title": "Accesso richiesto",
+          "description": "Devi eseguire l'accesso per eseguire questa azione."
+        }
       }
     },
     "CTA": {
@@ -42,6 +46,40 @@
         "heading": "Crea un account",
         "subheading": "Continuando, accetti i nostri Termini di servizio e la nostra Informativa sulla privacy.",
         "sign-in": "Hai gia un account? <link>Accedi</link>."
+      }
+    },
+    "r": {
+      "Create": {
+        "heading": "Crea un community",
+        "Fields": {
+          "Name": {
+            "label": "Nome",
+            "description": "Non è possibile cambiare i nomi delle community, nemmeno la capitalizzazione."
+          }
+        },
+        "Footer": {
+          "cancel": "Annulla",
+          "submit": "Crea community"
+        },
+        "Server": {
+          "Errors": {
+            "subreddit-already-exists": "Hai già una community con questo nome."
+          }
+        },
+        "Client": {
+          "Errors": {
+            "Toast": {
+              "Zod": {
+                "title": "Nome community non valido",
+                "description": "Il nome della community deve essere compreso tra 3 e 21 caratteri."
+              },
+              "Generic": {
+                "title": "Qualcosa è andato storto",
+                "description": "Si è verificato un errore durante la creazione della community. Riprova più tardi."
+              }
+            }
+          }
+        }
       }
     }
   },

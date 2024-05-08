@@ -33,7 +33,7 @@ export default function RootLayout({ children, authModal, params: { locale } }: 
           <Navbar />
           <Toaster />
 
-          <div className='pt-12'>
+          <div className='container pt-12 md:px-8'>
             {authModal}
             {children}
           </div>

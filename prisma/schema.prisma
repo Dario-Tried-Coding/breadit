@@ -68,6 +68,8 @@ model Subreddit {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([creatorId, name], name: "Unique_Subreddit_Per_User")
 }
 
 model Post {

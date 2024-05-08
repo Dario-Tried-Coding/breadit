@@ -111,8 +111,8 @@
     --muted-foreground: var(--zinc-500);
     --accent: var(--zinc-100);
     --accent-foreground: var(--zinc-900);
-    --destructive: var(--red-100);
-    --destructive-foreground: var(--red-500);
+    --destructive: var(--red-500);
+    --destructive-foreground: var(--zinc-50);
     --success: var(--green-100);
     --success-foreground: var(--green-500);
     --popover: var(--zinc-50);
