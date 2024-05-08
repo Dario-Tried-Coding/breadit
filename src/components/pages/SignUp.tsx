@@ -7,7 +7,7 @@ import { FC } from 'react'
 interface SignUpProps {}
 
 export const SignUp: FC<SignUpProps> = async ({}) => {
-  const t = await getTranslations('Pages.Auth.Sign-in')
+  const t = await getTranslations('Pages.Auth.Sign-up')
 
   return (
     <>
@@ -16,10 +16,13 @@ export const SignUp: FC<SignUpProps> = async ({}) => {
       <p className='text-sm'>{t('subheading')}</p>
       <AuthForm className='mt-6' />
       <p className='px-8 text-center text-sm text-muted-foreground'>
-        Already have an account?{' '}
-        <Link href='/sign-in' className='text-sm underline underline-offset-4 hover:text-foreground'>
-          Sign In
-        </Link>
+        {t.rich('sign-in', {
+          link: (chunk) => (
+            <Link href='/sign-in' className='text-sm underline underline-offset-4 hover:text-foreground'>
+              {chunk}
+            </Link>
+          ),
+        })}
       </p>
     </>
   )

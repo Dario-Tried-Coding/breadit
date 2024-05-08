@@ -14,8 +14,8 @@ const layout: FC<layoutProps> = ({ children }) => {
 
   return (
     <Dialog defaultOpen onOpenChange={(isOpen) => (!isOpen ? router.push(redirectUrl) : null)}>
-      <DialogContent>
-        {children}
+      <DialogContent className='pb-8 pt-12'>
+        <div className='container flex max-w-sm flex-col items-center gap-2 text-center'>{children}</div>
       </DialogContent>
     </Dialog>
   )

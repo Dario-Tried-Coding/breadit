@@ -6,7 +6,6 @@ import { i18nMiddleware } from '@/lib/next-intl/middleware'
 export default auth((req) => {
   const originalUrl = req.headers.get('referer') || req.nextUrl.href
   const redirectUrl = AUTH_ROUTES.some((r) => originalUrl.includes(r)) ? absoluteUrl(DEFAULT_REDIRECT_URL) : originalUrl
-  console.log(req.headers.get('referer'), req.nextUrl.href)
   
   const res = i18nMiddleware(req)
   

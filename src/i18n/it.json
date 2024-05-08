@@ -35,7 +35,13 @@
     "Auth": {
       "Sign-in": {
         "heading": "Che bello rivederti!",
-        "subheading": "Continuando, accetti i nostri Termini di servizio e la nostra Informativa sulla privacy."
+        "subheading": "Continuando, accetti i nostri Termini di servizio e la nostra Informativa sulla privacy.",
+        "sign-up": "Sei nuovo su Breadit? <link>Registrati</link>."
+      },
+      "Sign-up": {
+        "heading": "Crea un account",
+        "subheading": "Continuando, accetti i nostri Termini di servizio e la nostra Informativa sulla privacy.",
+        "sign-in": "Hai gia un account? <link>Accedi</link>."
       }
     }
   },
