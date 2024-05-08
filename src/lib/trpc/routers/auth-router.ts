@@ -11,7 +11,7 @@ export const authRouter = router({
     const t = await getTranslations({ locale, namespace: 'Auth.Errors' })
 
     try {
-      const url = (await signIn(provider, { redirect: false, redirectTo: redirectUrl || DEFAULT_REDIRECT_URL })) as string
+      const url = (await signIn(provider, { redirect: false, redirectTo: redirectUrl })) as string
       return { url }
     } catch (error) {
       if (error instanceof AuthError) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: t('social-auth-error', { provider }) })

@@ -1,13 +1,12 @@
 import { Icons } from '@/components/Icons'
 import AuthForm from '@/components/auth/AuthForm'
-import { Locale } from '@/config/i18n.config'
 import { Link } from '@/lib/next-intl/navigation'
 import { getTranslations } from 'next-intl/server'
 import { FC } from 'react'
 
-interface SignInProps {}
+interface SignUpProps {}
 
-export const SignIn: FC<SignInProps> = async ({ }) => {
+export const SignUp: FC<SignUpProps> = async ({}) => {
   const t = await getTranslations('Pages.Auth.Sign-in')
 
   return (
@@ -17,9 +16,9 @@ export const SignIn: FC<SignInProps> = async ({ }) => {
       <p className='text-sm'>{t('subheading')}</p>
       <AuthForm className='mt-6' />
       <p className='px-8 text-center text-sm text-muted-foreground'>
-        New to Breaddit?{' '}
-        <Link href='/sign-up' className='hover:text-foreground text-sm underline underline-offset-4'>
-          Sign Up
+        Already have an account?{' '}
+        <Link href='/sign-in' className='text-sm underline underline-offset-4 hover:text-foreground'>
+          Sign In
         </Link>
       </p>
     </>

@@ -2,22 +2,19 @@
 
 import { Icons } from '@/components/Icons'
 import { Button } from '@/components/ui/Button'
-import { REDIRECT_URL_PARAM } from '@/config/auth.config'
 import { useToast } from '@/hooks/use-toast'
 import { trpc } from '@/lib/trpc/trpc'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
-import { useSearchParams } from 'next/navigation'
 import { FC, HTMLAttributes } from 'react'
+import {parseCookies} from 'nookies'
+import { REDIRECT_URL_COOKIE } from '@/config/auth.config'
 
 interface AuthFormProps extends Omit<HTMLAttributes<HTMLFormElement>, 'action'> {}
 
 const AuthForm: FC<AuthFormProps> = ({ className, ...props }) => {
   const t = useTranslations('Auth')
   const { toast } = useToast()
-  const searchParams = useSearchParams()
-
-  const redirectUrl = searchParams.get(REDIRECT_URL_PARAM)
 
   const { mutate: signIn, isPending } = trpc.authRouter.signIn.useMutation({
     onSuccess(data) {
@@ -27,10 +24,12 @@ const AuthForm: FC<AuthFormProps> = ({ className, ...props }) => {
       toast({
         title: t('Errors.Toast.title'),
         description: error.message,
-        variant: 'destructive'
+        variant: 'destructive',
       })
-    }
+    },
   })
+
+  const redirectUrl = parseCookies()[REDIRECT_URL_COOKIE]
 
   return (
     <form className={cn('self-stretch', className)} {...props}>

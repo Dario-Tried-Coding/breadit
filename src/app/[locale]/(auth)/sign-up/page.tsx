@@ -1,4 +1,4 @@
-import { SignIn } from '@/components/pages/SignIn'
+import { SignUp } from '@/components/pages/SignUp'
 import { buttonVariants } from '@/components/ui/Button'
 import { Locale } from '@/config/i18n.config'
 import { Link } from '@/lib/next-intl/navigation'
@@ -21,7 +21,7 @@ const page: FC<pageProps> = async ({ params: { locale } }) => {
         <ChevronLeft className='h-4 w-4' />
         {t('home')}
       </Link>
-      <SignIn />
+      <SignUp />
     </>
   )
 }

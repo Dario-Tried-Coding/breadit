@@ -1,17 +1,16 @@
-import { DEFAULT_REDIRECT_URL } from '@/config/auth.config'
-import { getLocalePrefix } from '@/helpers/routing'
+import { REDIRECT_URL_COOKIE } from '@/config/auth.config'
 import { auth } from '@/lib/next-auth'
 import { i18nMiddleware } from '@/lib/next-intl/middleware'
 
 export default auth((req) => {
-  const { nextUrl } = req
-  const isLoggedIn = !!req.auth
+  const redirectUrl = req.headers.get('referer') || req.nextUrl.href
+  console.log(req.headers.get('referer'), req.nextUrl.href)
+  
+  const res = i18nMiddleware(req)
+  
+  res.cookies.set(REDIRECT_URL_COOKIE, redirectUrl)
 
-  const localePrefix = getLocalePrefix(nextUrl.pathname)
-
-  // if (nextUrl.pathname.startsWith('/sign-in') && isLoggedIn) return Response.redirect(new URL(`${localePrefix}${DEFAULT_REDIRECT_URL}`))
-
-  return i18nMiddleware(req)
+  return res
 })
 
 export const config = {

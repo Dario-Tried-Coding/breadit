@@ -1,13 +1,13 @@
 'use client'
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/DropdownMenu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/DropdownMenu'
+import { Link } from '@/lib/next-intl/navigation'
 import { User as UserIcon } from 'lucide-react'
 import { User } from 'next-auth'
-import { FC } from 'react'
-import { Link } from '@/lib/next-intl/navigation'
 import { signOut } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
+import { FC } from 'react'
 
 interface UserAccountNavProps {
   user: Pick<User, 'image' | 'name' | 'email'>
@@ -16,10 +16,12 @@ interface UserAccountNavProps {
 const UserAccountNav: FC<UserAccountNavProps> = ({ user }) => {
   const t = useTranslations('Components.Navbar.UserAccountNav')
 
+
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='rounded-full'>
-        <Avatar>
+        <Avatar className='h-8 w-8'>
           <AvatarImage src={user.image!} alt={user.name ?? t('Trigger.alt')} />
           <AvatarFallback>
             <UserIcon />

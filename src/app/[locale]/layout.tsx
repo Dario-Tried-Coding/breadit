@@ -12,6 +12,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 type Props = {
   children: React.ReactNode
+  authModal: React.ReactNode
   params: { locale: Locale }
 }
 
@@ -24,14 +25,18 @@ export async function generateMetadata({ params: { locale } }: Omit<Props, 'chil
   } as Metadata
 }
 
-export default function RootLayout({ children, params: { locale } }: Props) {
+export default function RootLayout({ children, authModal, params: { locale } }: Props) {
   return (
     <html lang={locale}>
-      <body className={cn(inter.className, 'antialiased min-h-screen')}>
+      <body className={cn(inter.className, 'min-h-screen antialiased')}>
         <Providers locale={locale}>
           <Navbar />
           <Toaster />
-          <div className='pt-12'>{children}</div>
+
+          <div className='pt-12'>
+            {authModal}
+            {children}
+          </div>
         </Providers>
       </body>
     </html>
