@@ -13,7 +13,7 @@ const page: FC<pageProps> = async ({}) => {
       main
       {session?.user && (
         <span>
-          <pre>{JSON.stringify(session.user)}</pre>
+          <pre>{JSON.stringify(session.user, null, 1)}</pre>
           <SignoutBtn />
         </span>
       )}
