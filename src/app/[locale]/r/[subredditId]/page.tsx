@@ -1,14 +1,10 @@
 import { FC } from 'react'
 
-interface pageProps {
-  params: {
-    locale: string
-    subredditId: string
-  }
-}
+interface pageProps {}
 
-const page: FC<pageProps> = ({ params: { locale, subredditId } }) => {
-  return <div>page</div>
+const page: FC<pageProps> = async ({ }) => {
+  return (
+    <>page</>
+  )
 }
-
 export default page

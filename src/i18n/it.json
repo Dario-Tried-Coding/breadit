@@ -2,7 +2,9 @@
   "Index": {
     "title": "Ciao mondo!",
     "Link": {
-      "home": "Home"
+      "home": "Home",
+      "back-home": "Torna alla home",
+      "back-to-community": "Torna alla community"
     }
   },
   "Auth": {
@@ -48,13 +50,21 @@
         "sign-in": "Hai gia un account? <link>Accedi</link>."
       }
     },
+    "Home": {
+      "heading": "Il tuo feed",
+      "Info": {
+        "heading": "Home",
+        "description": "La tua personalissima homepage Breadit. Torna qui per restare aggiornato sulle community che segui e per scoprire nuovi contenuti.",
+        "create-community": "Crea una community"
+      }
+    },
     "r": {
       "Create": {
         "heading": "Crea un community",
         "Fields": {
           "Name": {
             "label": "Nome",
-            "description": "Non è possibile cambiare i nomi delle community, nemmeno la capitalizzazione."
+            "description": "Non sarà più possibile cambiare i nomi della community, nemmeno la capitalizzazione."
           }
         },
         "Footer": {
@@ -79,6 +89,17 @@
               }
             }
           }
+        }
+      },
+      "SubredditId": {
+        "Info": {
+          "about-subreddit": "Riguardo r/{subredditName}",
+          "createdAt": "Creata",
+          "subscribers": "Iscritti",
+          "you-created": "Hai creato tu questa community.",
+          "join": "Iscriviti",
+          "leave": "Lascia",
+          "create-post": "Scrivi un post"
         }
       }
     }
