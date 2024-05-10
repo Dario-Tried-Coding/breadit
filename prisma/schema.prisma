@@ -57,7 +57,7 @@ model Account {
 
 model Subreddit {
   id   String @id @default(cuid())
-  name String
+  name String @unique
 
   creatorId String
   creator   User   @relation("SubredditCreator", fields: [creatorId], references: [id])
@@ -68,8 +68,6 @@ model Subreddit {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@unique([creatorId, name], name: "Unique_Subreddit_Per_User")
 }
 
 model Post {

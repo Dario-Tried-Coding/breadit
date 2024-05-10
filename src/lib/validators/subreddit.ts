@@ -4,3 +4,8 @@ export const subredditCreationValidator = z.object({
   name: z.string().min(3).max(21),
 })
 export type SubredditCreationPayload = z.infer<typeof subredditCreationValidator>
+
+export const subredditJoiningLeavingValidator = z.object({
+  subredditId: z.string()
+})
+export type SubredditJoiningLeavingPayload = z.infer<typeof subredditJoiningLeavingValidator>

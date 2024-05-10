@@ -73,7 +73,7 @@
         },
         "Server": {
           "Errors": {
-            "subreddit-already-exists": "Hai già una community con questo nome."
+            "subreddit-already-exists": "Esiste già una community questo nome. Per favore, prova con un altro nome."
           }
         },
         "Client": {
@@ -117,6 +117,28 @@
           "sign-out": "Esci"
         }
       }
+    },
+    "JoinLeaveBtn": {
+      "Errors": {
+        "not-found": "La community con l'ID fornito non esiste.",
+        "creator-cannot-join-leave": "Impossibile iscriversi o disiscriversi dalla community, poiché sei il creatore di questa community."
+      },
+      "Toasts": {
+        "GenericError": {
+          "title": "Qualcosa è andato storto",
+          "description": "Non é stato momentaneamente possibile {action, select, join {iscriverti alla community} leave {disiscriverti dalla community} other {eseguire quest'azione}}. Per favore, riprova più tardi."
+        },
+        "Subscribed": {
+          "title": "Iscrizione effettuata!",
+          "description": "Fai adesso parte di r/{subredditName}"
+        },
+        "Unsubscribed": {
+          "title": "Iscrizione annullata!",
+          "description": "Da adesso non fai più parte di r/{subredditName}"
+        }
+      },
+      "join": "Iscriviti alla community",
+      "leave": "Abbandona la community"
     }
   }
 }

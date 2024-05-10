@@ -26,8 +26,8 @@ const page: FC<pageProps> = ({}) => {
   const { signInToast } = useCustomToasts()
 
   const { mutate: createSubreddit, isPending } = trpc.createSubreddit.useMutation({
-    onSuccess(subredditId) {
-      router.push(`/r/${subredditId}`)
+    onSuccess(subredditName) {
+      router.push(`/r/${subredditName}`)
     },
     onError(error) {
       if (error instanceof ZodError)

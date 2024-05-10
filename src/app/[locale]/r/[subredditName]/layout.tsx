@@ -1,6 +1,9 @@
+import JoinLeaveToogle from '@/components/JoinLeaveToogle'
 import ToFeedBtn from '@/components/ToFeedBtn'
 import { Feed } from '@/components/pages/Feed'
 import { buttonVariants } from '@/components/ui/Button'
+import { DEFAULT_REDIRECT_URL } from '@/config/auth.config'
+import { Locale } from '@/config/i18n.config'
 import { getAuthSession } from '@/lib/next-auth/cache'
 import { Link } from '@/lib/next-intl/navigation'
 import { db } from '@/lib/prisma'
@@ -11,27 +14,34 @@ import { FC, PropsWithChildren } from 'react'
 
 interface layoutProps extends PropsWithChildren {
   params: {
-    locale: string
-    subredditId: string
+    locale: Locale
+    subredditName: string
   }
 }
 
-const layout: FC<layoutProps> = async ({ children, params: { locale, subredditId } }) => {
+const layout: FC<layoutProps> = async ({ children, params: { locale, subredditName } }) => {
+  const localeModule = (await import(`date-fns/locale`))[locale]
   const t = await getTranslations({ locale, namespace: 'Pages.r.SubredditId' })
   const session = await getAuthSession()
 
+  // if subreddit doesn't exist, redirect to DEFAULT_REDIRECT_URL
   const subreddit = await db.subreddit.findUnique({
-    where: { id: subredditId },
+    where: { name: subredditName },
     include: { subscribers: true },
   })
 
-  if (!subreddit) redirect('/')
+  if (!subreddit) redirect(DEFAULT_REDIRECT_URL)
+
+  // if not signed in, show posts but deny user any action
+  const isSubscribed = !!subreddit.subscribers.find((u) => u.id === session?.user?.id)
+  const isCreator = subreddit.creatorId === session?.user?.id
 
   const Layout = Feed.Layout
   const Info = Feed.Info
   const Heading = Info.Heading
   const List = Info.List
   const Item = Info.Item
+  const Footer = Info.Footer
 
   return (
     <>
@@ -45,18 +55,23 @@ const layout: FC<layoutProps> = async ({ children, params: { locale, subredditId
               <Item>
                 <Item.Term>{t('Info.createdAt')}</Item.Term>
                 <Item.Description>
-                  <time dateTime={subreddit.createdAt.toDateString()}>{format(subreddit.createdAt, 'MMMM dd, yyyy')}</time>
+                  <time dateTime={subreddit.createdAt.toDateString()}>{format(subreddit.createdAt, 'dd/MM/yyyy', { locale: localeModule })}</time>
                 </Item.Description>
               </Item>
               <Item>
                 <Item.Term>{t('Info.subscribers')}</Item.Term>
                 <Item.Description>{subreddit.subscribers.length}</Item.Description>
               </Item>
-              {subreddit.creatorId === session?.user?.id ? <Item>{t('Info.you-created')}</Item> : <div>subscribe leave toggle</div>}
+              {isCreator && <Item>{t('Info.you-created')}</Item>}
             </List>
-            <Link href={`/r/${subredditId}/post`} className={buttonVariants({ variant: 'outline', className: 'mb-4 w-full' })}>
-              {t('Info.create-post')}
-            </Link>
+            <Footer>
+              {session?.user && !isCreator && <JoinLeaveToogle isSubscribed={isSubscribed} subreddit={subreddit} />}
+              {session?.user && (
+                <Link href={`/r/${subredditName}/post`} className={buttonVariants({ className: 'w-full' })}>
+                  {t('Info.create-post')}
+                </Link>
+              )}
+            </Footer>
           </Info>
         </Layout>
       </Feed>

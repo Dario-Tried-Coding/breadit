@@ -84,12 +84,18 @@ interface InfoItem extends FC<InfoItemProps> {
 }
 const InfoItem: InfoItem = Object.assign(InfoItemComp, { Term: InfoItemTerm, Description: InfoItemDescription})
 
+interface InfoFooter extends HTMLAttributes<HTMLDivElement> {}
+const InfoFooter: FC<InfoFooter> = ({ className, children, ...rest }) => {
+  return <div className={cn('mb-4 mt-2 space-y-2', className)} {...rest}>{children}</div>
+}
+
 interface Info extends FC<InfoProps> {
   Heading: typeof InfoHeading
   List: typeof InfoItemList
   Item: typeof InfoItem
+  Footer: typeof InfoFooter
 }
-const Info: Info = Object.assign(InfoComp, { Heading: InfoHeading, List: InfoItemList, Item: InfoItem })
+const Info: Info = Object.assign(InfoComp, { Heading: InfoHeading, List: InfoItemList, Item: InfoItem, Footer: InfoFooter })
 
 interface FeedProps extends PropsWithChildren, HTMLAttributes<HTMLDivElement> {}
 const FeedComp: FC<FeedProps> = ({ children, className, ...props }) => {
