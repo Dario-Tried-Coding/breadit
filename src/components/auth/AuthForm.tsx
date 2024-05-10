@@ -7,7 +7,7 @@ import { trpc } from '@/lib/trpc/trpc'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 import { FC, HTMLAttributes } from 'react'
-import {parseCookies} from 'nookies'
+import { parseCookies } from 'nookies'
 import { REDIRECT_URL_COOKIE } from '@/config/auth.config'
 
 interface AuthFormProps extends Omit<HTMLAttributes<HTMLFormElement>, 'action'> {}
@@ -33,7 +33,7 @@ const AuthForm: FC<AuthFormProps> = ({ className, ...props }) => {
 
   return (
     <form className={cn('self-stretch', className)} {...props}>
-      <Button type='button' onClick={() => signIn({ provider: 'google', redirectUrl })} isLoading={isPending} className='w-full'>
+      <Button type='button' onClick={() => signIn({ provider: 'google', redirectUrl })} disabled={isPending} isLoading={isPending} className='w-full'>
         {!isPending && <Icons.google className='mr-2 h-4 w-4' />}
         {t('Providers.Google.name')}
       </Button>

@@ -39,6 +39,18 @@ const page: FC<pageProps> = ({}) => {
 
       if (error.data?.code === 'UNAUTHORIZED') return signInToast()
 
+      if (error.data?.code === 'CONFLICT') {
+        form.setError('name', {
+          message: t('Client.Errors.Toast.Conflict.description')
+        })
+
+        return toast({
+          title: t('Client.Errors.Toast.Conflict.title'),
+          description: t('Client.Errors.Toast.Conflict.description'),
+          variant: 'destructive',
+        })
+      }
+
       toast({
         title: t('Client.Errors.Toast.Generic.title'),
         description: t('Client.Errors.Toast.Generic.description'),
@@ -80,7 +92,7 @@ const page: FC<pageProps> = ({}) => {
                       <Input disabled={isPending} className='pl-6' {...field} />
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className='text-destructive-400' />
                 </FormItem>
               )}
             />

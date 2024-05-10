@@ -83,6 +83,10 @@
                 "title": "Nome community non valido",
                 "description": "Il nome della community deve essere compreso tra 3 e 21 caratteri."
               },
+              "Conflict": {
+                "title": "Community già esistente",
+                "description": "Esiste già una community con questo nome. Per favore, prova con un altro nome."
+              },
               "Generic": {
                 "title": "Qualcosa è andato storto",
                 "description": "Si è verificato un errore durante la creazione della community. Riprova più tardi."
