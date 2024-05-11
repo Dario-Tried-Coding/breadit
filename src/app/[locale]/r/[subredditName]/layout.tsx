@@ -10,7 +10,7 @@ import { db } from '@/lib/prisma'
 import { format } from 'date-fns'
 import { getTranslations } from 'next-intl/server'
 import { redirect } from 'next/navigation'
-import { FC, PropsWithChildren } from 'react'
+import { Children, FC, PropsWithChildren, ReactElement, ReactNode } from 'react'
 
 interface layoutProps extends PropsWithChildren {
   params: {
@@ -48,7 +48,7 @@ const layout: FC<layoutProps> = async ({ children, params: { locale, subredditNa
       <ToFeedBtn className='mt-6 md:mt-8' />
       <Feed>
         <Layout>
-          <div className='col-span-2'>{children}</div>
+          <div className="col-span-2">{children}</div>
           <Info>
             <Heading className='bg-accent'>{t('Info.about-subreddit', { subredditName: subreddit.name })}</Heading>
             <List>
@@ -67,7 +67,7 @@ const layout: FC<layoutProps> = async ({ children, params: { locale, subredditNa
             <Footer>
               {session?.user && !isCreator && <JoinLeaveToogle isSubscribed={isSubscribed} subreddit={subreddit} />}
               {session?.user && (
-                <Link href={`/r/${subredditName}/post`} className={buttonVariants({ className: 'w-full' })}>
+                <Link href={`/r/${subredditName}/publish`} className={buttonVariants({ className: 'w-full' })}>
                   {t('Info.create-post')}
                 </Link>
               )}

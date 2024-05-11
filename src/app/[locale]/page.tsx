@@ -15,13 +15,13 @@ interface pageProps {
 const page: FC<pageProps> = async ({ params: { locale } }) => {
   const t = await getTranslations({ locale, namespace: 'Pages.Home' })
 
-  const Heading = Feed.Heading
+  const { H1 } = Feed.Heading
   const Layout = Feed.Layout
   const Info = Feed.Info
 
   return (
     <Feed className='mt-8'>
-      <Heading>{t('heading')}</Heading>
+      <H1>{t('heading')}</H1>
       <Layout>
         <div className='col-span-2'>feed</div>
 

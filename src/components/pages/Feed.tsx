@@ -1,14 +1,29 @@
 import { cn } from '@/lib/utils'
-import { Children, FC, HTMLAttributes, PropsWithChildren, ReactNode } from 'react'
+import { Children, FC, HTMLAttributes, PropsWithChildren } from 'react'
 
-interface TitleProps extends PropsWithChildren, HTMLAttributes<HTMLHeadingElement> {}
-const Heading: FC<TitleProps> = ({ children, className, ...props }) => {
+interface H3Props extends HTMLAttributes<HTMLHeadingElement> {}
+const H3: FC<H3Props> = ({ className, children, ...rest }) => {
+  return (
+    <h3 className={cn('text-base font-semibold leading-6 truncate', className)} {...rest}>
+      {children}
+    </h3>
+  )
+}
+
+interface H1Props extends PropsWithChildren, HTMLAttributes<HTMLHeadingElement> {}
+const H1: FC<H1Props> = ({ children, className, ...props }) => {
   return (
     <h1 className={cn('text-3xl font-bold md:text-4xl', className)} {...props}>
       {children}
     </h1>
   )
 }
+
+interface Heading {
+  H1: typeof H1
+  H3: typeof H3
+}
+const Heading: Heading = { H1, H3 }
 
 interface LayoutProps extends PropsWithChildren, HTMLAttributes<HTMLDivElement> {}
 const Layout: FC<LayoutProps> = ({ children, className, ...props }) => {
@@ -24,9 +39,9 @@ const InfoComp: FC<InfoProps> = ({ className, children, ...props }) => {
   const [heading, ...body] = Children.toArray(children)
 
   return (
-    <div className={cn('order-first h-fit overflow-hidden rounded-lg border border-border-200 md:order-last', className)} {...props}>
+    <div className={cn('order-first h-fit overflow-hidden rounded-lg border border-border md:order-last', className)} {...props}>
       {heading}
-      <div className='px-6 py-4 bg-card'>{body}</div>
+      <div className='bg-card px-6 py-4'>{body}</div>
     </div>
   )
 }
@@ -42,7 +57,7 @@ const InfoHeading: FC<InfoHeaderProps> = ({ children, className, ...rest }) => {
   )
 }
 
-interface InfoItemListProps extends HTMLAttributes<HTMLDListElement> { }
+interface InfoItemListProps extends HTMLAttributes<HTMLDListElement> {}
 const InfoItemList: FC<InfoItemListProps> = ({ children, className, ...rest }) => {
   return (
     <dl className={cn('divide-y divide-border text-sm leading-6', className)} {...rest}>
@@ -82,11 +97,15 @@ interface InfoItem extends FC<InfoItemProps> {
   Term: typeof InfoItemTerm
   Description: typeof InfoItemDescription
 }
-const InfoItem: InfoItem = Object.assign(InfoItemComp, { Term: InfoItemTerm, Description: InfoItemDescription})
+const InfoItem: InfoItem = Object.assign(InfoItemComp, { Term: InfoItemTerm, Description: InfoItemDescription })
 
 interface InfoFooter extends HTMLAttributes<HTMLDivElement> {}
 const InfoFooter: FC<InfoFooter> = ({ className, children, ...rest }) => {
-  return <div className={cn('mb-4 mt-2 space-y-2', className)} {...rest}>{children}</div>
+  return (
+    <div className={cn('mb-4 mt-2 space-y-2', className)} {...rest}>
+      {children}
+    </div>
+  )
 }
 
 interface Info extends FC<InfoProps> {
