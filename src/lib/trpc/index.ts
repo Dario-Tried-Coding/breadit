@@ -1,9 +1,11 @@
-import { authRouter } from '@/lib/trpc/routers/auth-router'
-import { privateProcedure, router } from './init'
-import { subredditCreationValidator, subredditJoiningLeavingValidator } from '@/lib/validators/subreddit'
 import { db } from '@/lib/prisma'
+import { authRouter } from '@/lib/trpc/routers/auth-router'
+import { postCreationValidator } from '@/lib/validators/post'
+import { subredditCreationValidator, subredditJoiningLeavingValidator } from '@/lib/validators/subreddit'
 import { TRPCError } from '@trpc/server'
 import { getTranslations } from 'next-intl/server'
+import { privateProcedure, router } from './init'
+import { Prisma } from '@prisma/client'
 
 export const appRouter = router({
   authRouter,
@@ -50,6 +52,18 @@ export const appRouter = router({
       })
       return 'SUBSCRIBED' as const
     }),
+  publishPost: privateProcedure.input(postCreationValidator).mutation(async ({ ctx: { locale, userId }, input: { title, content, subredditId } }) => {
+    const t = await getTranslations({ locale, namespace: 'Index' })
+
+    const subreddit = await db.subreddit.findUnique({ where: { id: subredditId }, include: { subscribers: true } })
+    if (!subreddit) throw new TRPCError({ code: 'NOT_FOUND', message: 'Subreddit not found' })
+
+    const isSubscribed = subreddit.subscribers.find((u) => u.id === userId)
+    if (!isSubscribed) throw new TRPCError({ code: 'FORBIDDEN', message: 'You must be subscribed to post' })
+
+    const post = await db.post.create({ data: { title, content, subredditId, authorId: userId } })
+    return post.id
+  }),
 })
 
 export type AppRouter = typeof appRouter

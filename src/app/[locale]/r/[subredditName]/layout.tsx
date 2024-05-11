@@ -5,12 +5,11 @@ import { buttonVariants } from '@/components/ui/Button'
 import { DEFAULT_REDIRECT_URL } from '@/config/auth.config'
 import { Locale } from '@/config/i18n.config'
 import { getAuthSession } from '@/lib/next-auth/cache'
-import { Link } from '@/lib/next-intl/navigation'
+import { Link, redirect } from '@/lib/next-intl/navigation'
 import { db } from '@/lib/prisma'
 import { format } from 'date-fns'
 import { getTranslations } from 'next-intl/server'
-import { redirect } from 'next/navigation'
-import { Children, FC, PropsWithChildren, ReactElement, ReactNode } from 'react'
+import { FC, PropsWithChildren } from 'react'
 
 interface layoutProps extends PropsWithChildren {
   params: {
@@ -30,7 +29,7 @@ const layout: FC<layoutProps> = async ({ children, params: { locale, subredditNa
     include: { subscribers: true },
   })
 
-  if (!subreddit) redirect(DEFAULT_REDIRECT_URL)
+  if (!subreddit) return redirect(DEFAULT_REDIRECT_URL)
 
   // if not signed in, show posts but deny user any action
   const isSubscribed = !!subreddit.subscribers.find((u) => u.id === session?.user?.id)
