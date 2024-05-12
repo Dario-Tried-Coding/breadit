@@ -5,13 +5,17 @@ import { useCustomToasts } from '@/hooks/use-custom-toasts'
 import { useToast } from '@/hooks/use-toast'
 import { trpc } from '@/lib/trpc/trpc'
 import { uploadFiles } from '@/lib/uploadthing'
-import { PostCreationPayload, postCreationValidator } from '@/lib/validators/post'
+import { cn } from '@/lib/utils'
+import { POST_CREATION_I18N_PATH, PostCreationPayload, postCreationValidator } from '@/lib/validators/post'
 import '@/styles/editor.css'
+import { I18nValues } from '@/types/utils'
 import EditorJS from '@editorjs/editorjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMounted } from '@mantine/hooks'
+import { AlertTriangle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { FC, useCallback, useEffect, useRef } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ZodError } from 'zod'
 
@@ -23,22 +27,31 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
   const titleRef = useRef<HTMLInputElement | null>(null)
   const editorRef = useRef<EditorJS>()
 
+  const zodT = useTranslations(POST_CREATION_I18N_PATH)
   const router = useRouter()
   const { toast } = useToast()
   const { signInToast } = useCustomToasts()
 
   const isMounted = useMounted()
 
+  const [isEditorReady, setIsEditorReady] = useState(false)
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    clearErrors,
   } = useForm<PostCreationPayload>({
     resolver: zodResolver(postCreationValidator),
     defaultValues: {
       subredditId,
       title: '',
-      content: {},
+      content: {
+        blocks: [],
+        version: '2.29.1',
+        time: Date.now(),
+      },
     },
   })
 
@@ -80,8 +93,13 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
       const editor = new EditorJs({
         onReady() {
           editorRef.current = editor
+          setIsEditorReady(true)
         },
-        minHeight: 16,
+        async onChange({ saver }) {
+          const blocks = await saver.save()
+          clearErrors('content')
+          setValue('content', blocks)
+        },
         placeholder: 'Write your post here...',
         inlineToolbar: true,
         tools: {
@@ -134,6 +152,7 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
 
       return () => {
         editorRef.current?.destroy()
+        setIsEditorReady(false)
       }
     }
   }, [isMounted, initEditor])
@@ -141,7 +160,7 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
   const onSubmit = async (data: PostCreationPayload) => {
     const editorOutput = await editorRef.current?.save()
 
-    if (!editorOutput) return
+    if (!editorOutput || editorOutput.blocks.length === 0) return
 
     const payload: PostCreationPayload = {
       title: data.title,
@@ -153,11 +172,13 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
 
   const { ref: _titleRef, ...rest } = register('title')
 
+  const firstError = Object.entries(errors)[0]?.[1]
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='rounded-lg border bg-card p-4'>
       <input
         type='text'
-        className='w-full text-5xl font-bold outline-none'
+        className={cn('w-full text-5xl font-bold outline-none')}
         placeholder='Title'
         ref={(e) => {
           _titleRef(e)
@@ -165,8 +186,18 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
         }}
         {...rest}
       />
-      <div id='editorjs' className='prose mt-4 min-h-[300px] max-w-full px-5' />
-      <Button type='submit' size='lg' disabled={isPending} isLoading={isPending} className='w-full'>
+      <div id='editorjs' className='prose mt-4 min-h-[500px] max-w-full px-5' />
+      <p className='mt-4 hidden text-sm text-muted-foreground md:block'>
+        Use <kbd className='rounded-md border bg-muted px-1 text-sm uppercase'>/</kbd> to open the command menu.
+      </p>
+      {firstError && (
+        <div className='mt-2 flex items-center rounded-md bg-destructive-100 px-4 py-2'>
+          <AlertTriangle className='h-5 w-5 text-destructive-500' />
+          &nbsp;
+          <p className='text-sm text-destructive-500'>{zodT(firstError.message as I18nValues<typeof POST_CREATION_I18N_PATH>)}</p>
+        </div>
+      )}
+      <Button type='submit' size='lg' disabled={isPending || !isEditorReady} isLoading={isPending} className='mt-2 w-full'>
         Publish
       </Button>
     </form>

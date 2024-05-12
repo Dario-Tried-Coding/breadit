@@ -143,6 +143,17 @@
       },
       "join": "Iscriviti alla community",
       "leave": "Abbandona la community"
+    },
+    "Editor": {
+      "Zod": {
+        "Title": {
+          "required": "Per piacere, inserisci un titolo.",
+          "tooLong": "Il titolo non può superare i 255 caratteri."
+        },
+        "Content": {
+          "required": "Per piacere, inserisci il contenuto del post."
+        }
+      }
     }
   }
 }
