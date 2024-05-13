@@ -177,6 +177,10 @@
             "title": "Qualcosa è andato storto",
             "description": "Si è verificato un errore durante la pubblicazione del post. Riprova più tardi."
           }
+        },
+        "Success": {
+          "title": "Post pubblicato!",
+          "description": "Il tuo post è stato pubblicato con successo."
         }
       },
       "I18n": {

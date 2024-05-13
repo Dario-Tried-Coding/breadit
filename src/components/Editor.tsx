@@ -62,6 +62,10 @@ const Editor: FC<EditorProps> = ({ subreddit: { id: subredditId, name: subreddit
 
   const { mutate: publishPost, isPending } = trpc.publishPost.useMutation({
     onSuccess(postId) {
+      toast({
+        title: t('Toasts.Success.title'),
+        description: t('Toasts.Success.description'),
+      })
       router.push(`/r/${subredditId}/${postId}`)
     },
     onError(err) {
