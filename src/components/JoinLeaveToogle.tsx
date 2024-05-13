@@ -44,7 +44,7 @@ const JoinLeaveToogle: FC<JoinLeaveToogleProps> = ({ isSubscribed, subreddit, cl
 
   return (
     <Button onClick={() => joinLeaveSubreddit({ subredditId: subreddit.id })} disabled={isPending} isLoading={isPending} variant={variant} className={cn('w-full', className)} {...rest}>
-      {isSubscribed ? t('leave') : t('join')}
+      {isSubscribed ? t('leave-community') : t('join-community')}
     </Button>
   )
 }

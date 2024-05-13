@@ -95,7 +95,7 @@
           }
         }
       },
-      "SubredditId": {
+      "SubredditName": {
         "Info": {
           "about-subreddit": "Riguardo r/{subredditName}",
           "createdAt": "Creata",
@@ -104,6 +104,9 @@
           "join": "Iscriviti",
           "leave": "Lascia",
           "create-post": "Scrivi un post"
+        },
+        "Publish": {
+          "heading": "Scrivi post <span>in r/</span>"
         }
       }
     }
@@ -141,10 +144,16 @@
           "description": "Da adesso non fai più parte di r/{subredditName}"
         }
       },
-      "join": "Iscriviti alla community",
-      "leave": "Abbandona la community"
+      "join-community": "Iscriviti alla community",
+      "join": "Iscriviti",
+      "leave-community": "Abbandona la community",
+      "leave": "Abbandona"
     },
     "Editor": {
+      "title": "Titolo",
+      "placeholder": "Digita qui per scrivere il tuo post...",
+      "suggestion": "Usa <kbd>/</kbd> per apri il menu comandi.",
+      "submit": "Pubblica",
       "Zod": {
         "Title": {
           "required": "Per piacere, inserisci un titolo.",
@@ -152,6 +161,83 @@
         },
         "Content": {
           "required": "Per piacere, inserisci il contenuto del post."
+        }
+      },
+      "Toasts": {
+        "Errors": {
+          "Validation": {
+            "title": "Errore di validazione",
+            "description": "Per favore, correggi gli errori evidenziati nel form e riprova."
+          },
+          "Forbidden": {
+            "title": "Iscrizione necessaria",
+            "description": "Devi essere iscritto alla community per poter pubblicare un post."
+          },
+          "Generic": {
+            "title": "Qualcosa è andato storto",
+            "description": "Si è verificato un errore durante la pubblicazione del post. Riprova più tardi."
+          }
+        }
+      },
+      "I18n": {
+        "UI": {
+          "BlockTunes": {
+            "click-to-tune": "Clicca per modificare",
+            "or-drag": "oppure trascina per riordinare"
+          },
+          "Toolbar": {
+            "Toolbox": {
+              "add": "Aggiungi"
+            },
+            "Popover": {
+              "filter": "Filtra",
+              "nothing-found": "Nessun risultato trovato"
+            }
+          },
+          "InlineToolbar": {
+            "convert-to": "Converti in"
+          }
+        },
+        "ToolNames": {
+          "text": "Testo",
+          "heading": "Titolo",
+          "list": "Lista",
+          "link": "Link",
+          "image": "Immagine",
+          "table": "Tabella",
+          "code": "Codice",
+          "inline-code": "Codice inline",
+          "embed": "Allegato multimediale",
+          "bold": "Grassetto",
+          "italic": "Corsivo"
+        },
+        "BlockTunes": {
+          "delete": "Elimina",
+          "click-to-delete": "Clicca per eliminare",
+          "move-up": "Sposta su",
+          "move-down": "Sposta giù"
+        },
+        "Tools": {
+          "Table": {
+            "add-column-to-left": "Aggiungi colonna a sinistra",
+            "add-column-to-right": "Aggiungi colonna a destra",
+            "add-row-above": "Aggiungi riga sopra",
+            "add-row-below": "Aggiungi riga sotto",
+            "delete-row": "Elimina riga",
+            "delete-column": "Elimina colonna",
+            "with-headings": "Con intestazioni",
+            "without-headings": "Senza intestazioni"
+          },
+          "List": {
+            "unordered": "Lista non ordinata",
+            "ordered": "Lista ordinata"
+          },
+          "Image": {
+            "caption": "Didascalia",
+            "with-border": "Con bordo",
+            "stretch-image": "Allarga immagine",
+            "with-background": "Con sfondo"
+          }
         }
       }
     }

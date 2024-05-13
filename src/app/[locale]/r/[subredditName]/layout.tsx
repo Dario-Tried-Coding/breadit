@@ -20,7 +20,7 @@ interface layoutProps extends PropsWithChildren {
 
 const layout: FC<layoutProps> = async ({ children, params: { locale, subredditName } }) => {
   const localeModule = (await import(`date-fns/locale`))[locale]
-  const t = await getTranslations({ locale, namespace: 'Pages.r.SubredditId' })
+  const t = await getTranslations({ locale, namespace: 'Pages.r.SubredditName' })
   const session = await getAuthSession()
 
   // if subreddit doesn't exist, redirect to DEFAULT_REDIRECT_URL
