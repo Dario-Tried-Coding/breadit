@@ -1,6 +1,7 @@
 'use client'
 
 import { Button, ButtonProps } from '@/components/ui/Button'
+import { useCustomToasts } from '@/hooks/use-custom-toasts'
 import { useToast } from '@/hooks/use-toast'
 import { trpc } from '@/lib/trpc/trpc'
 import { cn } from '@/lib/utils'
@@ -18,6 +19,7 @@ const JoinLeaveToogle: FC<JoinLeaveToogleProps> = ({ isSubscribed, subreddit, cl
   const t = useTranslations('Components.JoinLeaveBtn')
   const router = useRouter()
   const { toast } = useToast()
+  const { signInToast} = useCustomToasts()
 
   const { mutate: joinLeaveSubreddit, isPending } = trpc.joinLeaveSubreddit.useMutation({
     onSuccess: (data) => {
@@ -33,7 +35,9 @@ const JoinLeaveToogle: FC<JoinLeaveToogleProps> = ({ isSubscribed, subreddit, cl
           description: t('Toasts.Unsubscribed.description', { subredditName: subreddit.name }),
         })
     },
-    onError() {
+    onError(err) {
+      if (err.data?.code === 'UNAUTHORIZED') return signInToast()
+
       return toast({
         title: t('Toasts.GenericError.title'),
         description: t('Toasts.GenericError.description', { action: isSubscribed ? 'leave' : 'join' }),

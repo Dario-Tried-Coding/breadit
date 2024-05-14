@@ -47,7 +47,7 @@ const layout: FC<layoutProps> = async ({ children, params: { locale, subredditNa
       <ToFeedBtn className='mt-6 md:mt-8' />
       <Feed>
         <Layout>
-          <div className="col-span-2">{children}</div>
+          <div className='col-span-2'>{children}</div>
           <Info>
             <Heading className='bg-accent'>{t('Info.about-subreddit', { subredditName: subreddit.name })}</Heading>
             <List>
@@ -64,12 +64,10 @@ const layout: FC<layoutProps> = async ({ children, params: { locale, subredditNa
               {isCreator && <Item>{t('Info.you-created')}</Item>}
             </List>
             <Footer>
-              {session?.user && !isCreator && <JoinLeaveToogle isSubscribed={isSubscribed} subreddit={subreddit} />}
-              {session?.user && (
-                <Link href={`/r/${subredditName}/publish`} className={buttonVariants({ className: 'w-full' })}>
-                  {t('Info.create-post')}
-                </Link>
-              )}
+              {!isCreator && <JoinLeaveToogle isSubscribed={isSubscribed} subreddit={subreddit} />}
+              <Link href={`/r/${subredditName}/publish`} className={buttonVariants({ className: 'w-full' })}>
+                {t('Info.create-post')}
+              </Link>
             </Footer>
           </Info>
         </Layout>

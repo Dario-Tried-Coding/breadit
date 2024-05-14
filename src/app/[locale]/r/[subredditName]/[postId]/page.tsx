@@ -1,16 +1,16 @@
+import { PostVote_Skeleton } from '@/components/post/post-vote/PostVote.client'
+import PostVote from '@/components/post/post-vote/PostVote.server'
 import { Locale } from '@/config/i18n.config'
+import { edjsParser } from '@/lib/editor-js/parser'
+import { constructCachedPost } from '@/lib/helpers/cached-post'
 import { getAuthSession } from '@/lib/next-auth/cache'
 import { redirect } from '@/lib/next-intl/navigation'
 import { db } from '@/lib/prisma'
 import { redis } from '@/lib/redis'
-import { headingParser } from '@/lib/utils/editor-js-parsers/heading-parser'
-import { linkParser } from '@/lib/utils/editor-js-parsers/link-parser'
-import { tableParser } from '@/lib/utils/editor-js-parsers/table-parses'
 import { CachedPost } from '@/types/utils/redis'
 import { OutputData } from '@editorjs/editorjs'
-import edjsHTML from 'editorjs-html'
 import { Interweave } from 'interweave'
-import { FC } from 'react'
+import { FC, Suspense } from 'react'
 
 interface pageProps {
   params: {
@@ -24,37 +24,31 @@ const page: FC<pageProps> = async ({ params: { locale, subredditName, postId } }
   const session = await getAuthSession()
 
   const cachedPost = (await redis.hgetall(`post:${postId}`)) as CachedPost | null
-  let html: string | null = cachedPost?.content ?? null
+  let post: CachedPost | null = cachedPost ?? null
 
-  if (!html) {
-    // get post from db
+  if (!post) {
     const dbPost = await db.post.findUnique({ where: { id: postId }, include: { author: true, votes: true } })
     if (!dbPost) return redirect(`/r/${subredditName}`)
 
-    const edjsParser = edjsHTML({
-      link: linkParser,
-      header: headingParser,
-      table: tableParser,
-    })
-    html = edjsParser.parse(dbPost.content as unknown as OutputData).join('')
+    post = constructCachedPost(dbPost)
 
-    // Cache post
-    const currentVote = dbPost.votes.find((v) => v.userId === session?.user?.id)?.vote
-
-    const postToCache: CachedPost = {
-      id: dbPost.id,
-      title: dbPost.title,
-      authorUsername: dbPost.author.username as string,
-      content: html,
-      currentVote: currentVote ?? null,
-    }
-
-    await redis.hmset(`post:${postId}`, postToCache)
+    const votesAmt = post.votesAmt
+    if (votesAmt > 0) await redis.hset(`post:${postId}`, post)
+  } else {
+    if (post.votesAmt <= 0) await redis.del(`post:${postId}`)
   }
 
+  const getUserVote = async () =>
+    session?.user?.id ? (await db.postVote.findUnique({ where: { postId_userId: { postId, userId: session.user.id } } }))?.vote : null
+
   return (
-    <div>
-      <Interweave className='prose' content={html} />
+    <div className='flex flex-col items-center justify-between sm:flex-row sm:items-start sm:gap-4'>
+      <Suspense fallback={<PostVote_Skeleton />}>
+        <PostVote postId={postId} initialVotesAmt={post.votesAmt} {...{ getUserVote }} />
+      </Suspense>
+      <div className='self-stretch rounded-sm bg-card p-4 sm:flex-1 sm:self-start'>
+        <Interweave content={post.content} />
+      </div>
     </div>
   )
 }

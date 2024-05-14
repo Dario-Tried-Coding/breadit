@@ -5,5 +5,5 @@ export type CachedPost = {
   title: string
   authorUsername: string
   content: string
-  currentVote: Vote | null
+  votesAmt: number
 }

@@ -1,10 +1,16 @@
 import { db } from '@/lib/prisma'
 import { authRouter } from '@/lib/trpc/routers/auth-router'
-import { postCreationValidator } from '@/lib/validators/post'
+import { postCreationValidator, postVotingValidator } from '@/lib/validators/post'
 import { subredditCreationValidator, subredditJoiningLeavingValidator } from '@/lib/validators/subreddit'
 import { TRPCError } from '@trpc/server'
 import { getTranslations } from 'next-intl/server'
 import { privateProcedure, router } from './init'
+import { sleep } from '@/helpers'
+import { redis } from '@/lib/redis'
+import { CachedPost } from '@/types/utils/redis'
+import { OutputData } from '@editorjs/editorjs'
+import { edjsParser } from '@/lib/editor-js/parser'
+import { constructCachedPost } from '@/lib/helpers/cached-post'
 
 export const appRouter = router({
   authRouter,
@@ -63,6 +69,32 @@ export const appRouter = router({
 
     const post = await db.post.create({ data: { title, content, subredditId, authorId: userId } })
     return post.id
+  }),
+  votePost: privateProcedure.input(postVotingValidator).mutation(async ({ ctx: { locale, userId }, input: { postId, vote } }) => {
+    const post = await db.post.findUnique({ where: { id: postId }, include: { votes: true, author: true } })
+    if (!post) throw new TRPCError({ code: 'NOT_FOUND', message: 'Post not found' })
+
+    const postVote = await db.postVote.findUnique({ where: { postId_userId: { postId, userId } } })
+
+    const cachedPost = await redis.hgetall(`post:${postId}`)
+    if (cachedPost) {
+      if (!postVote) await redis.hincrby(`post:${postId}`, 'votesAmt', vote === 'UP' ? 1 : -1)
+      else if (postVote.vote === vote) await redis.hincrby(`post:${postId}`, 'votesAmt', vote === 'UP' ? -1 : 1)
+      else await redis.hincrby(`post:${postId}`, 'votesAmt', vote === 'UP' ? 2 : -2)
+    }
+
+    if (postVote) {
+      if (postVote.vote === vote) {
+        await db.postVote.delete({ where: { postId_userId: { postId, userId } } })
+        return 'DELETED' as const
+      }
+
+      await db.postVote.update({ where: { postId_userId: { postId, userId } }, data: { vote } })
+      return 'UPDATED' as const
+    }
+
+    await db.postVote.create({ data: { postId, userId, vote } })
+    return 'CREATED' as const
   }),
 })
 
