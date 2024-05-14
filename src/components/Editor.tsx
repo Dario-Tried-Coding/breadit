@@ -66,7 +66,7 @@ const Editor: FC<EditorProps> = ({ subreddit: { id: subredditId, name: subreddit
         title: t('Toasts.Success.title'),
         description: t('Toasts.Success.description'),
       })
-      router.push(`/r/${subredditId}/${postId}`)
+      router.push(`/r/${subredditName}/${postId}`)
     },
     onError(err) {
       if (err instanceof ZodError)

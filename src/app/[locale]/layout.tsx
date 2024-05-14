@@ -7,8 +7,11 @@ import '@/styles/globals.css'
 import { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { Inter } from 'next/font/google'
+import { polyfill } from 'interweave-ssr';
 
 const inter = Inter({ subsets: ['latin'] })
+
+polyfill()
 
 type Props = {
   children: React.ReactNode
