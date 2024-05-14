@@ -243,6 +243,31 @@
             "with-background": "Con sfondo"
           }
         }
+      },
+      "Server": {
+        "Errors": {
+          "subreddit-not-found": "La community con l'ID fornito non esiste.",
+          "forbidden": "Devi essere iscritto alla community per poter pubblicare un post."
+        }
+      }
+    },
+    "PostVote": {
+      "Server": {
+        "Errors": {
+          "post-not-found": "Il post con l'ID fornito non esiste."
+        }
+      },
+      "Client": {
+        "Toasts": {
+          "GenericError": {
+            "title": "Qualcosa è andato storto",
+            "description": "Non è stato possibile votare il post. Per favore, riprova più tardi."
+          }
+        },
+        "UI": {
+          "upvote": "Vota positivamente",
+          "downvote": "Vota negativamente"
+        }
       }
     }
   }

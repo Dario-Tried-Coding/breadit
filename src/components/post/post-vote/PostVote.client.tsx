@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { Vote } from '@prisma/client'
 import { useActor } from '@xstate/react'
 import { ArrowBigDown, ArrowBigUp, Loader2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { FC } from 'react'
 import { fromTransition } from 'xstate'
 
@@ -42,6 +43,7 @@ interface PostVote_Client_Props {
   initialVote?: Vote | null
 }
 const PostVote_Client: FC<PostVote_Client_Props> = ({ postId, initialVotesAmt, initialVote }) => {
+  const t = useTranslations('Components.PostVote.Client')
   const { toast } = useToast()
   const { signInToast } = useCustomToasts()
 
@@ -57,8 +59,8 @@ const PostVote_Client: FC<PostVote_Client_Props> = ({ postId, initialVotesAmt, i
       if (err.data?.code === 'UNAUTHORIZED') return signInToast()
 
       toast({
-        title: 'There was an error voting',
-        description: 'It seems like there was an error voting, please try again later',
+        title: t('Toasts.GenericError.title'),
+        description: t('Toasts.GenericError.description'),
         variant: 'destructive',
       })
     },
@@ -71,7 +73,7 @@ const PostVote_Client: FC<PostVote_Client_Props> = ({ postId, initialVotesAmt, i
 
   return (
     <div className='flex flex-row items-center gap-8 sm:w-20 sm:flex-col sm:gap-4'>
-      <Button onClick={() => votePost('UP')} size='sm' variant='ghost' aria-label='upvote' className='order-last sm:order-first'>
+      <Button onClick={() => votePost('UP')} size='sm' variant='ghost' aria-label={t('UI.upvote')} className='order-last sm:order-first'>
         <ArrowBigUp
           className={cn('h-5 w-5 text-foreground-700', {
             'fill-success text-success': context.voted === 'UP',
@@ -79,7 +81,7 @@ const PostVote_Client: FC<PostVote_Client_Props> = ({ postId, initialVotesAmt, i
         />
       </Button>
       <p className='text-center text-sm font-medium'>{context.count}</p>
-      <Button onClick={() => votePost('DOWN')} size='sm' variant='ghost' aria-label='downvote' className='order-first sm:order-last'>
+      <Button onClick={() => votePost('DOWN')} size='sm' variant='ghost' aria-label={t('UI.downvote')} className='order-first sm:order-last'>
         <ArrowBigDown
           className={cn('h-5 w-5 text-foreground-700', {
             'fill-destructive text-destructive': context.voted === 'DOWN',
@@ -93,15 +95,17 @@ const PostVote_Client: FC<PostVote_Client_Props> = ({ postId, initialVotesAmt, i
 export default PostVote_Client
 
 export const PostVote_Skeleton = () => {
+  const t = useTranslations('Components.PostVote.Client')
+
   return (
     <div className='flex flex-row items-center gap-8 sm:w-20 sm:flex-col sm:gap-4'>
-      <Button size='sm' variant='ghost' disabled aria-label='upvote' className='order-last sm:order-first'>
+      <Button size='sm' variant='ghost' disabled aria-label={t('UI.upvote')} className='order-last sm:order-first'>
         <ArrowBigUp className='h-5 w-5 text-foreground-700' />
       </Button>
       <div className='text-center text-sm font-medium'>
         <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
       </div>
-      <Button size='sm' variant='ghost' disabled aria-label='downvote' className='order-first sm:order-last'>
+      <Button size='sm' variant='ghost' disabled aria-label={t('UI.downvote')} className='order-first sm:order-last'>
         <ArrowBigDown className='h-5 w-5 text-foreground-700' />
       </Button>
     </div>

@@ -1,16 +1,11 @@
 import { db } from '@/lib/prisma'
+import { redis } from '@/lib/redis'
 import { authRouter } from '@/lib/trpc/routers/auth-router'
 import { postCreationValidator, postVotingValidator } from '@/lib/validators/post'
 import { subredditCreationValidator, subredditJoiningLeavingValidator } from '@/lib/validators/subreddit'
 import { TRPCError } from '@trpc/server'
 import { getTranslations } from 'next-intl/server'
 import { privateProcedure, router } from './init'
-import { sleep } from '@/helpers'
-import { redis } from '@/lib/redis'
-import { CachedPost } from '@/types/utils/redis'
-import { OutputData } from '@editorjs/editorjs'
-import { edjsParser } from '@/lib/editor-js/parser'
-import { constructCachedPost } from '@/lib/helpers/cached-post'
 
 export const appRouter = router({
   authRouter,
@@ -58,21 +53,23 @@ export const appRouter = router({
       return 'SUBSCRIBED' as const
     }),
   publishPost: privateProcedure.input(postCreationValidator).mutation(async ({ ctx: { locale, userId }, input: { title, content, subredditId } }) => {
-    const t = await getTranslations({ locale, namespace: 'Index' })
+    const t = await getTranslations({ locale, namespace: 'Components.Editor.Server' })
 
     const subreddit = await db.subreddit.findUnique({ where: { id: subredditId }, include: { subscribers: true } })
-    if (!subreddit) throw new TRPCError({ code: 'NOT_FOUND', message: 'Subreddit not found' })
+    if (!subreddit) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.subreddit-not-found') })
 
     const isOwner = subreddit.creatorId === userId
     const isSubscribed = subreddit.subscribers.find((u) => u.id === userId)
-    if (!isSubscribed && !isOwner) throw new TRPCError({ code: 'FORBIDDEN', message: 'You must be subscribed to post' })
+    if (!isSubscribed && !isOwner) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.forbidden') })
 
     const post = await db.post.create({ data: { title, content, subredditId, authorId: userId } })
     return post.id
   }),
   votePost: privateProcedure.input(postVotingValidator).mutation(async ({ ctx: { locale, userId }, input: { postId, vote } }) => {
+    const t = await getTranslations({ locale, namespace: 'Components.PostVote.Server'})
+
     const post = await db.post.findUnique({ where: { id: postId }, include: { votes: true, author: true } })
-    if (!post) throw new TRPCError({ code: 'NOT_FOUND', message: 'Post not found' })
+    if (!post) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.post-not-found') })
 
     const postVote = await db.postVote.findUnique({ where: { postId_userId: { postId, userId } } })
 
