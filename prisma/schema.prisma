@@ -15,6 +15,7 @@ enum Vote {
 model User {
   id            String    @id @default(cuid())
   name          String?
+  username      String?   @unique
   email         String    @unique
   emailVerified DateTime?
   image         String?
@@ -29,9 +30,9 @@ model User {
 
   comments     Comment[]
   commentVotes CommentVote[]
-  
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Account {
@@ -96,7 +97,7 @@ model PostVote {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
-  vote Int
+  vote Vote
 
   @@id([postId, userId])
 }
@@ -129,7 +130,7 @@ model CommentVote {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
-  vote Int
+  vote Vote
 
   @@id([commentId, userId])
 }

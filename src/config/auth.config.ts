@@ -6,7 +6,11 @@ export const DEFAULT_REDIRECT_URL = '/' as const
 export const REDIRECT_URL_COOKIE = 'authjs.callback-url' as const
 
 export const auth_config = {
-  providers: [Google],
+  providers: [Google({
+    userinfo: {
+      
+    }
+  })],
   pages: {
     signIn: '/sign-in'
   }
