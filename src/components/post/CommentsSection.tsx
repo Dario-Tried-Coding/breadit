@@ -1,4 +1,5 @@
 import Comment from '@/components/post/Comment'
+import WriteComment from '@/components/post/WriteComment'
 import { Locale } from '@/config/i18n.config'
 import { getAuthSession } from '@/lib/next-auth/cache'
 import { db } from '@/lib/prisma'
@@ -29,7 +30,7 @@ const PostCommentsSection: FC<PostCommentsSection> = async ({ locale, postId, cl
 
   return (
     <div className={cn('', className)} {...rest}>
-      <div>write comment</div>
+      <WriteComment postId={postId} autofocus={false} />
       {comments.length > 0 && (
         <div className='mt-4 flex flex-col gap-y-6'>
           {comments
@@ -45,13 +46,13 @@ const PostCommentsSection: FC<PostCommentsSection> = async ({ locale, postId, cl
                   {c.replies.length > 0 && (
                     <div className='border-l pl-4 pt-4 space-y-4'>
                       {c.replies
-                        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+                        .sort((a, b) => b.createdAt.getTime() + a.createdAt.getTime())
                         .map(async (r) => {
                           const votesAmt = r.votes.reduce((acc, vote) => acc + (vote.vote === 'UP' ? 1 : -1), 0)
                           const userVote = session?.user?.id ? r.votes.find((v) => v.userId === session.user?.id)?.vote ?? null : undefined
                           const createdAt = await formatTimeToNow(new Date(r.createdAt), locale)
 
-                          return <Comment key={r.id} comment={{ ...r, createdAt }} votesAmt={votesAmt} userVote={userVote} />
+                          return <Comment key={r.id} comment={{ ...r, createdAt }} votesAmt={votesAmt} userVote={userVote} replyToId={c.id}  />
                         })}
                     </div>
                   )}

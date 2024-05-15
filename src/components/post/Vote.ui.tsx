@@ -43,7 +43,7 @@ export const Vote_Skeleton = () => {
   const t = useTranslations('Components.Voting')
 
   return (
-    <div className='flex flex-row items-center gap-8 sm:w-20 sm:flex-col sm:gap-4'>
+    <div className='flex flex-row items-center gap-8 sm:flex-col sm:gap-4'>
       <Button size='sm' variant='ghost' disabled aria-label={t('upvote')} className='order-last sm:order-first'>
         <ArrowBigUp className='h-5 w-5 text-foreground-700' />
       </Button>

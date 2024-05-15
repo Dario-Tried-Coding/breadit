@@ -58,7 +58,7 @@ const page: FC<pageProps> = async ({ params: { locale, subredditName, postId } }
         <Interweave content={post.content} />
         <Suspense fallback={<Loader2 className='mt-4 h-5 w-5 animate-spin' />}>
           <Separator className='mt-12' />
-          <CommentsSection locale={locale} postId={postId} className='mt-12' />
+          <CommentsSection locale={locale} postId={postId} className='mt-4' />
         </Suspense>
       </div>
     </div>

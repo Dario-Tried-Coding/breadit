@@ -13,7 +13,7 @@ const Navbar: FC<NavbarProps> = async ({}) => {
   const t = await getTranslations()
 
   return (
-    <div className='fixed inset-x-0 top-0 h-12 border-b bg-background-100'>
+    <div className='fixed inset-x-0 top-0 z-10 h-12 border-b bg-background-100'>
       <div className='container flex h-full items-center justify-between gap-2 md:px-8'>
         <Link href='/' className='flex items-center gap-2 outline-offset-4'>
           <Icons.logo className='h-8 w-8 md:h-6 md:w-6' />

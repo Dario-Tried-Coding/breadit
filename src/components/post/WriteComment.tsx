@@ -18,14 +18,16 @@ interface WriteCommentProps {
   replyToId?: string
   mention?: string
   closeForm?: () => void
+  autofocus?: boolean
 }
 
-const WriteComment: FC<WriteCommentProps> = ({ postId, replyToId, mention, closeForm }) => {
+const WriteComment: FC<WriteCommentProps> = ({ postId, replyToId, mention, closeForm, autofocus = true }) => {
   const router = useRouter()
   const { toast } = useToast()
   const { signInToast } = useCustomToasts()
 
   const formRef = useRef<HTMLFormElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
 
   const form = useForm<CommentCreationPayload>({
     resolver: zodResolver(commentCreationValidator),
@@ -61,6 +63,7 @@ const WriteComment: FC<WriteCommentProps> = ({ postId, replyToId, mention, close
   })
 
   const onSubmit = (data: CommentCreationPayload) => {
+
     createComment(data)
   }
 
@@ -77,7 +80,7 @@ const WriteComment: FC<WriteCommentProps> = ({ postId, replyToId, mention, close
                 <FormControl>
                   <Textarea
                     placeholder='Write here your reply...'
-                    autoFocus
+                    autoFocus={autofocus}
                     onFocus={(e) => e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && e.ctrlKey && form.formState.isDirty) formRef.current?.requestSubmit()
