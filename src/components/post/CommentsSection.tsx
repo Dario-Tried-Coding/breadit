@@ -30,7 +30,7 @@ const PostCommentsSection: FC<PostCommentsSection> = async ({ locale, postId, cl
 
   return (
     <div className={cn('', className)} {...rest}>
-      <WriteComment postId={postId} autofocus={false} />
+      <WriteComment postId={postId} autofocus={false} label />
       {comments.length > 0 && (
         <div className='mt-4 flex flex-col gap-y-6'>
           {comments

@@ -29,8 +29,15 @@ const CommentVote: FC<CommentVoteProps> = ({ commentId, initialVotesAmt, initial
     onMutate({ voteType }) {
       send({ type: voteType })
     },
-    onError(_, { voteType }) {
+    onError(err, { voteType }) {
       send({ type: voteType })
+
+      if (err.data?.code === 'FORBIDDEN')
+        return toast({
+          title: t('Toasts.MustBePartOfSubreddit.title'),
+          description: t('Toasts.MustBePartOfSubreddit.description'),
+          variant: 'destructive',
+        })
 
       toast({
         title: t('Toasts.GenericError.title'),

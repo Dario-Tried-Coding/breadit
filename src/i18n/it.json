@@ -272,9 +272,36 @@
       }
     },
     "Comment": {
+      "Client": {
+        "UI": {
+          "alt": "Avatar dell'utente",
+          "reply": "Rispondi",
+          "user-prefix": "u/",
+          "Form": {
+            "label": "Commento",
+            "submit": "Invia",
+            "cancel": "Annulla",
+            "placeholder": "Scrivi un commento..."
+          }
+        },
+        "Toasts": {
+          "Zod": {
+            "title": "Il commento non può essere vuoto",
+            "description": "Per favore, inserisci un commento prima di inviarlo."
+          },
+          "Forbidden": {
+            "title": "Iscrizione necessaria",
+            "description": "Devi essere iscritto alla community per poter commentare."
+          },
+          "Generic": {
+            "title": "Qualcosa è andato storto",
+            "description": "Si è verificato un errore durante l'invio del commento. Riprova più tardi."
+          }
+        }
+      },
       "Zod": {
         "Content": {
-          "required": "Per favore, inserisci il contenuto del commento.",
+          "required": "Il commento deve avere una lunghezza minima di 1 carattere.",
           "tooLong": "Il commento non può superare i 1.000 caratteri."
         }
       }
@@ -282,7 +309,9 @@
     "CommentVote": {
       "Server": {
         "Errors": {
-          "comment-not-found": "Il commento con l'ID fornito non esiste."
+          "comment-not-found": "Il commento con l'ID fornito non esiste.",
+          "post-not-found": "Il post con l'ID fornito non esiste.",
+          "must-be-part-of-subreddit": "Devi far parte della subreddit per poter votare i commenti."
         }
       },
       "Client": {
@@ -290,6 +319,10 @@
           "alt": "Avatar dell'utente"
         },
         "Toasts": {
+          "MustBePartOfSubreddit": {
+            "title": "Iscrizione necessaria",
+            "description": "Devi essere iscritto alla community per poter votare i commenti."
+          },
           "GenericError": {
             "title": "Qualcosa è andato storto. Voto non riuscito.",
             "description": "Non è stato possibile votare il commento. Per favore, riprova più tardi."

@@ -19,7 +19,7 @@ interface CommentProps {
 }
 
 const Comment: FC<CommentProps> = ({ comment, votesAmt, userVote, replyToId }) => {
-  const t = useTranslations('Components.CommentVote.Client')
+  const t = useTranslations('Components.Comment.Client.UI')
   const session = useSession()
   const router = useRouter()
 
@@ -29,13 +29,13 @@ const Comment: FC<CommentProps> = ({ comment, votesAmt, userVote, replyToId }) =
     <div>
       <div className='flex items-center gap-2'>
         <Avatar className='h-8 w-8'>
-          <AvatarImage src={comment.author.image!} alt={t('Avatar.alt')} />
+          <AvatarImage src={comment.author.image!} alt={t('alt')} />
           <AvatarFallback>
             <UserIcon />
           </AvatarFallback>
         </Avatar>
         <p className='text-sm font-medium'>
-          u/{comment.author.username}&nbsp;•&nbsp;<span className='font-normal text-muted-foreground'>{comment.createdAt}</span>
+          {t('user-prefix')}{comment.author.username}&nbsp;•&nbsp;<span className='font-normal text-muted-foreground'>{comment.createdAt}</span>
         </p>
       </div>
       <p className='mt-2 text-sm'>{comment.content}</p>
@@ -43,7 +43,7 @@ const Comment: FC<CommentProps> = ({ comment, votesAmt, userVote, replyToId }) =
         <Vote commentId={comment.id} initialVotesAmt={votesAmt} initialVoteType={userVote} />
         <Button onClick={() => (session.data?.user ? setIsReplying(true) : router.push('/sign-in'))} variant='ghost' size='sm' className='gap-1.5'>
           <MessageSquare className='h-4 w-4' />
-          Reply
+          {t('reply')}
         </Button>
       </div>
       {isReplying && (
@@ -52,6 +52,7 @@ const Comment: FC<CommentProps> = ({ comment, votesAmt, userVote, replyToId }) =
           replyToId={replyToId || comment.id}
           mention={comment.author.username ?? undefined}
           closeForm={() => setIsReplying(false)}
+          className='mt-2'
         />
       )}
     </div>

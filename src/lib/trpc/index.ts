@@ -8,6 +8,7 @@ import { getTranslations } from 'next-intl/server'
 import { privateProcedure, router } from './init'
 import { commentCreationValidator, commentVotingValidator } from '@/lib/validators/comment'
 import { sleep } from '@/helpers'
+import { isUserPartOfSubreddit } from '@/lib/helpers/models'
 
 export const appRouter = router({
   authRouter,
@@ -60,9 +61,8 @@ export const appRouter = router({
     const subreddit = await db.subreddit.findUnique({ where: { id: subredditId }, include: { subscribers: true } })
     if (!subreddit) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.subreddit-not-found') })
 
-    const isOwner = subreddit.creatorId === userId
-    const isSubscribed = subreddit.subscribers.find((u) => u.id === userId)
-    if (!isSubscribed && !isOwner) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.forbidden') })
+    const isPartOfSubreddit = await isUserPartOfSubreddit({ userId, subredditId: subreddit.id })
+    if (!isPartOfSubreddit) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.forbidden') })
 
     const post = await db.post.create({ data: { title, content, subredditId, authorId: userId } })
     return post.id
@@ -100,6 +100,12 @@ export const appRouter = router({
 
     const comment = await db.comment.findUnique({ where: { id: commentId } })
     if (!comment) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.comment-not-found') })
+    
+    const post = await db.post.findUnique({ where: { id: comment.postId }})
+    if (!post) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.post-not-found') })
+    
+    const isPartOfSubreddit = await isUserPartOfSubreddit({ userId, subredditId: post.subredditId })
+    if (!isPartOfSubreddit) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.must-be-part-of-subreddit') })
 
     const commentVote = await db.commentVote.findUnique({ where: { commentId_userId: { commentId, userId } } })
 
@@ -116,21 +122,26 @@ export const appRouter = router({
     await db.commentVote.update({ where: { commentId_userId: { commentId, userId } }, data: { vote: voteType } })
     return 'UPDATED' as const
   }),
-  createComment: privateProcedure.input(commentCreationValidator).mutation(async ({ ctx: { locale, userId }, input: { postId, replyToId, content } }) => {
-    const t = await getTranslations({ locale, namespace: 'Components' })
+  createComment: privateProcedure
+    .input(commentCreationValidator)
+    .mutation(async ({ ctx: { locale, userId }, input: { postId, replyToId, content } }) => {
+      const t = await getTranslations({ locale, namespace: 'Components' })
 
-    const post = await db.post.findUnique({ where: { id: postId } })
-    if (!post) throw new TRPCError({ code: 'NOT_FOUND', message: 'The post with the specified ID was not found.' })
+      const post = await db.post.findUnique({ where: { id: postId } })
+      if (!post) throw new TRPCError({ code: 'NOT_FOUND', message: 'The post with the specified ID was not found.' })
 
-    let replyingToComment: Comment | null = null
-    if (replyToId) {
-      replyingToComment = (await db.comment.findUnique({ where: { id: replyToId } })) as Comment | null
-      if (!replyingToComment) throw new TRPCError({ code: 'NOT_FOUND', message: 'The comment with the specified ID was not found.' })
-    }
+      const isPartOfSubreddit = await isUserPartOfSubreddit({ userId, subredditId: post.subredditId })
+      if (!isPartOfSubreddit) throw new TRPCError({ code: 'FORBIDDEN', message: 'You need to be subscribed to the subreddit in order to comment' })
 
-    await db.comment.create({ data: { authorId: userId, content, postId, replyToId } })
-    return 'CREATED' as const
-  })
+      let replyingToComment: Comment | null = null
+      if (replyToId) {
+        replyingToComment = (await db.comment.findUnique({ where: { id: replyToId } })) as Comment | null
+        if (!replyingToComment) throw new TRPCError({ code: 'NOT_FOUND', message: 'The comment with the specified ID was not found.' })
+      }
+
+      await db.comment.create({ data: { authorId: userId, content, postId, replyToId } })
+      return 'CREATED' as const
+    }),
 })
 
 export type AppRouter = typeof appRouter
