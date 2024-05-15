@@ -1,4 +1,4 @@
-import { edjsParser } from '@/lib/editor-js/parser'
+import { edjsParser } from '@/lib/editor-js';
 import { CachedPost } from '@/types/utils/redis'
 import { OutputData } from '@editorjs/editorjs';
 import { Post, PostVote, User } from '@prisma/client'
@@ -10,5 +10,6 @@ export function constructCachedPost(post: Post & { votes: PostVote[]; author: Us
     authorUsername: post.author.username as string,
     content: edjsParser.parse(post.content as unknown as OutputData).join(''),
     votesAmt: post.votes.reduce((acc, vote) => acc + (vote.vote === 'UP' ? 1 : -1), 0),
+    createdAt: post.createdAt
   }
 }

@@ -4,4 +4,5 @@ export type CachedPost = {
   authorUsername: string
   content: string
   votesAmt: number
+  createdAt: Date
 }

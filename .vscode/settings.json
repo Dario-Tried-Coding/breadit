@@ -1,5 +1,6 @@
 {
   "material-icon-theme.folders.associations": {
-    "actions": "Connection"
+    "actions": "Connection",
+    "machines": "Project"
   }
 }

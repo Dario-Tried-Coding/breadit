@@ -1,4 +1,13 @@
-import { TableBlock } from '@/types/utils/editor-js'
+import { HeadingBlock, LinkBlock, TableBlock } from '@/types/utils/editor-js'
+
+
+export const headingParser = (block: HeadingBlock) => {
+  return `<h${block.data.level} class=''>${block.data.text}</h${block.data.level}>`
+}
+
+export const linkParser = (block: LinkBlock) => {
+  return `<p class='provaaaaa'>${block.data.meta.title}</p>`
+}
 
 export const tableParser = (block: TableBlock) => {
   const { content, withHeadings } = block.data

@@ -6,6 +6,8 @@ import { subredditCreationValidator, subredditJoiningLeavingValidator } from '@/
 import { TRPCError } from '@trpc/server'
 import { getTranslations } from 'next-intl/server'
 import { privateProcedure, router } from './init'
+import { commentVotingValidator } from '@/lib/validators/comment'
+import { sleep } from '@/helpers'
 
 export const appRouter = router({
   authRouter,
@@ -66,7 +68,7 @@ export const appRouter = router({
     return post.id
   }),
   votePost: privateProcedure.input(postVotingValidator).mutation(async ({ ctx: { locale, userId }, input: { postId, vote } }) => {
-    const t = await getTranslations({ locale, namespace: 'Components.PostVote.Server'})
+    const t = await getTranslations({ locale, namespace: 'Components.PostVote.Server' })
 
     const post = await db.post.findUnique({ where: { id: postId }, include: { votes: true, author: true } })
     if (!post) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.post-not-found') })
@@ -92,6 +94,27 @@ export const appRouter = router({
 
     await db.postVote.create({ data: { postId, userId, vote } })
     return 'CREATED' as const
+  }),
+  voteComment: privateProcedure.input(commentVotingValidator).mutation(async ({ ctx: { locale, userId }, input: { commentId, voteType } }) => {
+    const t = await getTranslations({ locale, namespace: 'Components.CommentVote.Server' })
+
+    const comment = await db.comment.findUnique({ where: { id: commentId } })
+    if (!comment) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.comment-not-found') })
+
+    const commentVote = await db.commentVote.findUnique({ where: { commentId_userId: { commentId, userId } } })
+
+    if (!commentVote) {
+      await db.commentVote.create({ data: { commentId, userId, vote: voteType } })
+      return 'CREATED' as const
+    }
+
+    if (commentVote.vote === voteType) {
+      await db.commentVote.delete({ where: { commentId_userId: { commentId, userId } } })
+      return 'DELETED' as const
+    }
+
+    await db.commentVote.update({ where: { commentId_userId: { commentId, userId } }, data: { vote: voteType } })
+    return 'UPDATED' as const
   }),
 })
 

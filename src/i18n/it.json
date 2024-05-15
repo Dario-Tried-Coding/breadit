@@ -107,6 +107,11 @@
         },
         "Publish": {
           "heading": "Scrivi post <span>in r/</span>"
+        },
+        "PostId": {
+          "Post": {
+            "posted-by": "Pubblicato da u/{username}"
+          }
         }
       }
     }
@@ -263,12 +268,30 @@
             "title": "Qualcosa è andato storto",
             "description": "Non è stato possibile votare il post. Per favore, riprova più tardi."
           }
-        },
-        "UI": {
-          "upvote": "Vota positivamente",
-          "downvote": "Vota negativamente"
         }
       }
+    },
+    "CommentVote": {
+      "Server": {
+        "Errors": {
+          "comment-not-found": "Il commento con l'ID fornito non esiste."
+        }
+      },
+      "Client": {
+        "Avatar": {
+          "alt": "Avatar dell'utente"
+        },
+        "Toasts": {
+          "GenericError": {
+            "title": "Qualcosa è andato storto. Voto non riuscito.",
+            "description": "Non è stato possibile votare il commento. Per favore, riprova più tardi."
+          }
+        }
+      }
+    },
+    "Voting": {
+      "upvote": "Vota positivamente",
+      "downvote": "Vota negativamente"
     }
   }
 }
