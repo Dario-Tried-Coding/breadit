@@ -43,9 +43,9 @@ const PostCommentsSection: FC<PostCommentsSection> = async ({ locale, postId, cl
                 <div key={c.id} className='flex flex-col gap-2'>
                   <Comment comment={{ ...c, createdAt }} votesAmt={votesAmt} userVote={userVote} />
                   {c.replies.length > 0 && (
-                    <div className='border-l pl-4 pt-4'>
+                    <div className='border-l pl-4 pt-4 space-y-4'>
                       {c.replies
-                        .sort((a, b) => b.votes.length - a.votes.length)
+                        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
                         .map(async (r) => {
                           const votesAmt = r.votes.reduce((acc, vote) => acc + (vote.vote === 'UP' ? 1 : -1), 0)
                           const userVote = session?.user?.id ? r.votes.find((v) => v.userId === session.user?.id)?.vote ?? null : undefined

@@ -6,7 +6,7 @@ import { subredditCreationValidator, subredditJoiningLeavingValidator } from '@/
 import { TRPCError } from '@trpc/server'
 import { getTranslations } from 'next-intl/server'
 import { privateProcedure, router } from './init'
-import { commentVotingValidator } from '@/lib/validators/comment'
+import { commentCreationValidator, commentVotingValidator } from '@/lib/validators/comment'
 import { sleep } from '@/helpers'
 
 export const appRouter = router({
@@ -116,6 +116,21 @@ export const appRouter = router({
     await db.commentVote.update({ where: { commentId_userId: { commentId, userId } }, data: { vote: voteType } })
     return 'UPDATED' as const
   }),
+  createComment: privateProcedure.input(commentCreationValidator).mutation(async ({ ctx: { locale, userId }, input: { postId, replyToId, content } }) => {
+    const t = await getTranslations({ locale, namespace: 'Components' })
+
+    const post = await db.post.findUnique({ where: { id: postId } })
+    if (!post) throw new TRPCError({ code: 'NOT_FOUND', message: 'The post with the specified ID was not found.' })
+
+    let replyingToComment: Comment | null = null
+    if (replyToId) {
+      replyingToComment = (await db.comment.findUnique({ where: { id: replyToId } })) as Comment | null
+      if (!replyingToComment) throw new TRPCError({ code: 'NOT_FOUND', message: 'The comment with the specified ID was not found.' })
+    }
+
+    await db.comment.create({ data: { authorId: userId, content, postId, replyToId } })
+    return 'CREATED' as const
+  })
 })
 
 export type AppRouter = typeof appRouter

@@ -271,6 +271,14 @@
         }
       }
     },
+    "Comment": {
+      "Zod": {
+        "Content": {
+          "required": "Per favore, inserisci il contenuto del commento.",
+          "tooLong": "Il commento non può superare i 1.000 caratteri."
+        }
+      }
+    },
     "CommentVote": {
       "Server": {
         "Errors": {
