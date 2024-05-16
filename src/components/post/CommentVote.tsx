@@ -5,9 +5,9 @@ import { useCustomToasts } from '@/hooks/use-custom-toasts'
 import { useToast } from '@/hooks/use-toast'
 import { trpc } from '@/lib/trpc/trpc'
 import { cn } from '@/lib/utils'
-import { votesAmountLogic } from '@/machines/votes-amt-reducer-logic'
+import { votingLogic } from '@/machines/voting-machine'
 import { Vote } from '@prisma/client'
-import { useActor } from '@xstate/react'
+import { useMachine } from '@xstate/react'
 import { useTranslations } from 'next-intl'
 import { FC, HTMLAttributes } from 'react'
 
@@ -23,14 +23,21 @@ const CommentVote: FC<CommentVoteProps> = ({ commentId, initialVotesAmt, initial
   const { toast } = useToast()
   const { signInToast } = useCustomToasts()
 
-  const [{ context }, send] = useActor(votesAmountLogic, { input: { votesAmt: initialVotesAmt, voteType: initialVoteType } })
+  const [state, send] = useMachine(
+    votingLogic.provide({
+      actions: {
+        sendVote: ({ context }) => voteMtn({ commentId, voteType: context.voteType }),
+      },
+    }),
+    { input: { votesAmt: initialVotesAmt, voteType: initialVoteType ?? null } }
+  )
 
   const { mutate: voteMtn, isPending } = trpc.voteComment.useMutation({
-    onMutate({ voteType }) {
-      send({ type: voteType })
+    onSuccess() {
+      send({ type: 'vote.success' })
     },
-    onError(err, { voteType }) {
-      send({ type: voteType })
+    onError(err) {
+      send({ type: 'vote.error' })
 
       if (err.data?.code === 'FORBIDDEN')
         return toast({
@@ -47,12 +54,15 @@ const CommentVote: FC<CommentVoteProps> = ({ commentId, initialVotesAmt, initial
     },
   })
 
+  // TODO: Add join subreddit toast
   const voteComment = (voteType: Vote) => {
     if (initialVoteType === undefined) return signInToast()
-    if (!isPending) voteMtn({ commentId, voteType })
+    if (!isPending) send({ type: 'click', voteType })
   }
 
-  return <Vote_UI voteFn={voteComment} voteType={context.voteType} votesAmt={context.votesAmt} className={cn('gap-2', className)} {...rest} />
+  return (
+    <Vote_UI voteFn={voteComment} voteType={state.context.voteType} votesAmt={state.context.votesAmt} className={cn('gap-2', className)} {...rest} />
+  )
 }
 
 export default CommentVote

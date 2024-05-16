@@ -4,7 +4,7 @@ import { z } from "zod";
 
 export const commentVotingValidator = z.object({
   commentId: z.string(),
-  voteType: z.custom<Vote>(),
+  voteType: z.custom<Vote>().nullable(),
 })
 export type CommentVotingPayload = z.infer<typeof commentVotingValidator>
 

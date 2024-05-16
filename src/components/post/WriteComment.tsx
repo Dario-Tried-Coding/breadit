@@ -24,6 +24,9 @@ interface WriteCommentProps extends Omit<HTMLAttributes<HTMLFormElement>, 'child
   label?: boolean
 }
 
+// TODO: Blur form on submit -> hint: form.control.register('content').ref...
+// TODO: Add mention support
+
 const WriteComment: FC<WriteCommentProps> = ({ postId, replyToId, mention, closeForm, autofocus = true, label = false, className, ...rest }) => {
   const t = useTranslations('Components.Comment.Client')
   const router = useRouter()

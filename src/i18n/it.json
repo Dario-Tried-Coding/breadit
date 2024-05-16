@@ -311,7 +311,8 @@
         "Errors": {
           "comment-not-found": "Il commento con l'ID fornito non esiste.",
           "post-not-found": "Il post con l'ID fornito non esiste.",
-          "must-be-part-of-subreddit": "Devi far parte della subreddit per poter votare i commenti."
+          "must-be-part-of-subreddit": "Devi far parte della subreddit per poter votare i commenti.",
+          "comment-to-delete-not-found": "Il commento che stai tentando di eliminare non esiste."
         }
       },
       "Client": {

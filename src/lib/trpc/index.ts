@@ -100,23 +100,25 @@ export const appRouter = router({
 
     const comment = await db.comment.findUnique({ where: { id: commentId } })
     if (!comment) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.comment-not-found') })
-    
-    const post = await db.post.findUnique({ where: { id: comment.postId }})
+
+    const post = await db.post.findUnique({ where: { id: comment.postId } })
     if (!post) throw new TRPCError({ code: 'NOT_FOUND', message: t('Errors.post-not-found') })
-    
+
     const isPartOfSubreddit = await isUserPartOfSubreddit({ userId, subredditId: post.subredditId })
     if (!isPartOfSubreddit) throw new TRPCError({ code: 'FORBIDDEN', message: t('Errors.must-be-part-of-subreddit') })
 
     const commentVote = await db.commentVote.findUnique({ where: { commentId_userId: { commentId, userId } } })
 
+    if (voteType === null) {
+      if (!commentVote) throw new TRPCError({ code: 'BAD_REQUEST', message: t('Errors.comment-to-delete-not-found') })
+      
+      await db.commentVote.delete({ where: { commentId_userId: { commentId: commentVote.commentId, userId: commentVote.userId } } })
+      return 'DELETED' as const
+    }
+
     if (!commentVote) {
       await db.commentVote.create({ data: { commentId, userId, vote: voteType } })
       return 'CREATED' as const
-    }
-
-    if (commentVote.vote === voteType) {
-      await db.commentVote.delete({ where: { commentId_userId: { commentId, userId } } })
-      return 'DELETED' as const
     }
 
     await db.commentVote.update({ where: { commentId_userId: { commentId, userId } }, data: { vote: voteType } })
