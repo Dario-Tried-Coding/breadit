@@ -1,14 +1,13 @@
+import { isUserPartOfSubreddit } from '@/lib/helpers/models'
 import { db } from '@/lib/prisma'
-import { redis } from '@/lib/redis'
 import { authRouter } from '@/lib/trpc/routers/auth-router'
+import { commentCreationValidator, commentVotingValidator } from '@/lib/validators/comment'
 import { postCreationValidator, postVotingValidator } from '@/lib/validators/post'
 import { subredditCreationValidator, subredditJoiningLeavingValidator } from '@/lib/validators/subreddit'
 import { TRPCError } from '@trpc/server'
 import { getTranslations } from 'next-intl/server'
 import { privateProcedure, router } from './init'
-import { commentCreationValidator, commentVotingValidator } from '@/lib/validators/comment'
-import { sleep } from '@/helpers'
-import { isUserPartOfSubreddit } from '@/lib/helpers/models'
+import { redis } from '@/lib/redis'
 
 export const appRouter = router({
   authRouter,
@@ -67,7 +66,7 @@ export const appRouter = router({
     const post = await db.post.create({ data: { title, content, subredditId, authorId: userId } })
     return post.id
   }),
-  votePost: privateProcedure.input(postVotingValidator).mutation(async ({ ctx: { locale, userId }, input: { postId, vote } }) => {
+  votePost: privateProcedure.input(postVotingValidator).mutation(async ({ ctx: { locale, userId }, input: { postId, voteType } }) => {
     const t = await getTranslations({ locale, namespace: 'Components.PostVote.Server' })
 
     const post = await db.post.findUnique({ where: { id: postId }, include: { votes: true, author: true } })
@@ -75,25 +74,25 @@ export const appRouter = router({
 
     const postVote = await db.postVote.findUnique({ where: { postId_userId: { postId, userId } } })
 
-    const cachedPost = await redis.hgetall(`post:${postId}`)
-    if (cachedPost) {
-      if (!postVote) await redis.hincrby(`post:${postId}`, 'votesAmt', vote === 'UP' ? 1 : -1)
-      else if (postVote.vote === vote) await redis.hincrby(`post:${postId}`, 'votesAmt', vote === 'UP' ? -1 : 1)
-      else await redis.hincrby(`post:${postId}`, 'votesAmt', vote === 'UP' ? 2 : -2)
+    const cachedPostVotesAmt = await redis.hget<number | null>(`post:${postId}`, 'votesAmt')
+
+    if (voteType === null) {
+      if (!postVote) throw new TRPCError({ code: 'BAD_REQUEST', message: "The vote you' trying to delete does not exist." })
+
+      const deletedVote = await db.postVote.delete({ where: { postId_userId: { postId, userId } } })
+      if (cachedPostVotesAmt !== null) await redis.hincrby(`post:${postId}`, 'votesAmt', deletedVote.vote === 'UP' ? -1 : 1)
+      return 'DELETED' as const
     }
 
-    if (postVote) {
-      if (postVote.vote === vote) {
-        await db.postVote.delete({ where: { postId_userId: { postId, userId } } })
-        return 'DELETED' as const
-      }
-
-      await db.postVote.update({ where: { postId_userId: { postId, userId } }, data: { vote } })
-      return 'UPDATED' as const
+    if (!postVote) {
+      const createdVote = await db.postVote.create({ data: { postId, userId, vote: voteType } })
+      if (cachedPostVotesAmt !== null) await redis.hincrby(`post:${postId}`, 'votesAmt', createdVote.vote === 'UP' ? 1 : -1)
+      return 'CREATED' as const
     }
 
-    await db.postVote.create({ data: { postId, userId, vote } })
-    return 'CREATED' as const
+    const updatedVote = await db.postVote.update({ where: { postId_userId: { postId, userId } }, data: { vote: voteType } })
+    if (cachedPostVotesAmt !== null) await redis.hincrby(`post:${postId}`, 'votesAmt', updatedVote.vote === 'UP' ? 2 : -2)
+    return 'UPDATED' as const
   }),
   voteComment: privateProcedure.input(commentVotingValidator).mutation(async ({ ctx: { locale, userId }, input: { commentId, voteType } }) => {
     const t = await getTranslations({ locale, namespace: 'Components.CommentVote.Server' })
@@ -111,7 +110,7 @@ export const appRouter = router({
 
     if (voteType === null) {
       if (!commentVote) throw new TRPCError({ code: 'BAD_REQUEST', message: t('Errors.comment-to-delete-not-found') })
-      
+
       await db.commentVote.delete({ where: { commentId_userId: { commentId: commentVote.commentId, userId: commentVote.userId } } })
       return 'DELETED' as const
     }

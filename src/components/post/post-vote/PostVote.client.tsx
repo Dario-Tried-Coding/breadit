@@ -4,11 +4,11 @@ import Vote_UI from '@/components/post/Vote.ui'
 import { useCustomToasts } from '@/hooks/use-custom-toasts'
 import { useToast } from '@/hooks/use-toast'
 import { trpc } from '@/lib/trpc/trpc'
+import { votingLogic } from '@/machines/voting-machine'
 import { Vote } from '@prisma/client'
-import { useActor } from '@xstate/react'
+import { useMachine } from '@xstate/react'
 import { useTranslations } from 'next-intl'
 import { FC } from 'react'
-import { votesAmountLogic } from '@/machines/votes-amt-reducer-logic'
 
 interface PostVote_Client_Props {
   postId: string
@@ -20,14 +20,21 @@ const PostVote_Client: FC<PostVote_Client_Props> = ({ postId, initialVotesAmt, i
   const { toast } = useToast()
   const { signInToast } = useCustomToasts()
 
-  const [{ context }, send] = useActor(votesAmountLogic, { input: { votesAmt: initialVotesAmt, voteType: initialVote } })
+  const [state, send] = useMachine(
+    votingLogic.provide({
+      actions: {
+        sendVote: ({ context: { voteType } }) => voteMtn({ postId, voteType }),
+      },
+    }),
+    { input: { votesAmt: initialVotesAmt, voteType: initialVote ?? null } }
+  )
 
-  const { mutate: voteMtn, isPending } = trpc.votePost.useMutation({
-    onMutate({ vote }) {
-      send({ type: vote })
+  const { mutate: voteMtn } = trpc.votePost.useMutation({
+    onSuccess() {
+      send({ type: 'vote.success' })
     },
-    onError(_, { vote }) {
-      send({ type: vote })
+    onError() {
+      send({ type: 'vote.error' })
 
       toast({
         title: t('Toasts.GenericError.title'),
@@ -37,12 +44,12 @@ const PostVote_Client: FC<PostVote_Client_Props> = ({ postId, initialVotesAmt, i
     },
   })
 
-  const votePost = (vote: Vote) => {
+  const votePost = (voteType: Vote) => {
     if (initialVote === undefined) return signInToast()
-    if (!isPending) voteMtn({ postId, vote })
+    send({ type: 'click', voteType })
   }
 
-  return <Vote_UI voteFn={votePost} voteType={context.voteType} votesAmt={context.votesAmt} className='gap-8 sm:flex-col sm:gap-4' />
+  return <Vote_UI voteFn={votePost} voteType={state.context.voteType} votesAmt={state.context.votesAmt} className='gap-8 sm:flex-col sm:gap-4' />
 }
 
 export default PostVote_Client

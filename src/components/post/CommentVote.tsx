@@ -32,7 +32,7 @@ const CommentVote: FC<CommentVoteProps> = ({ commentId, initialVotesAmt, initial
     { input: { votesAmt: initialVotesAmt, voteType: initialVoteType ?? null } }
   )
 
-  const { mutate: voteMtn, isPending } = trpc.voteComment.useMutation({
+  const { mutate: voteMtn } = trpc.voteComment.useMutation({
     onSuccess() {
       send({ type: 'vote.success' })
     },
@@ -57,7 +57,7 @@ const CommentVote: FC<CommentVoteProps> = ({ commentId, initialVotesAmt, initial
   // TODO: Add join subreddit toast
   const voteComment = (voteType: Vote) => {
     if (initialVoteType === undefined) return signInToast()
-    if (!isPending) send({ type: 'click', voteType })
+    send({ type: 'click', voteType })
   }
 
   return (

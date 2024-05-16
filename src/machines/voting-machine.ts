@@ -53,7 +53,7 @@ export const votingLogic = setup({
 
     debouncing: {
       after: {
-        '250': {
+        '500': {
           target: 'savingVote',
           actions: 'sendVote',
         },

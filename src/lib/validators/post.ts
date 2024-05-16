@@ -28,6 +28,6 @@ export type PostCreationPayload = z.infer<typeof postCreationValidator>
 
 export const postVotingValidator = z.object({
   postId: z.string(),
-  vote: z.custom<Vote>(),
+  voteType: z.custom<Vote>().nullable(),
 })
 export type PostVotingPayload = z.infer<typeof postVotingValidator>
