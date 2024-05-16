@@ -259,7 +259,8 @@
     "PostVote": {
       "Server": {
         "Errors": {
-          "post-not-found": "Il post con l'ID fornito non esiste."
+          "post-not-found": "Il post con l'ID fornito non esiste.",
+          "vote-to-delete-not-found": "Il voto che stai tentando di eliminare non esiste."
         }
       },
       "Client": {

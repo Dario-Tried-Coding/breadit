@@ -77,7 +77,7 @@ export const appRouter = router({
     const cachedPostVotesAmt = await redis.hget<number | null>(`post:${postId}`, 'votesAmt')
 
     if (voteType === null) {
-      if (!postVote) throw new TRPCError({ code: 'BAD_REQUEST', message: "The vote you' trying to delete does not exist." })
+      if (!postVote) throw new TRPCError({ code: 'BAD_REQUEST', message: t('Errors.vote-to-delete-not-found') })
 
       const deletedVote = await db.postVote.delete({ where: { postId_userId: { postId, userId } } })
       if (cachedPostVotesAmt !== null) await redis.hincrby(`post:${postId}`, 'votesAmt', deletedVote.vote === 'UP' ? -1 : 1)
