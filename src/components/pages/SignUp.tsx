@@ -18,7 +18,7 @@ export const SignUp: FC<SignUpProps> = async ({}) => {
       <p className='px-8 text-center text-sm text-muted-foreground'>
         {t.rich('sign-in', {
           link: (chunk) => (
-            <Link href='/sign-in' className='text-sm underline underline-offset-4 hover:text-foreground'>
+            <Link href='/auth/sign-in' className='text-sm underline underline-offset-4 hover:text-foreground'>
               {chunk}
             </Link>
           ),

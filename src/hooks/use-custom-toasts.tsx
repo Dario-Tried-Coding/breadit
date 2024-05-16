@@ -12,7 +12,7 @@ export const useCustomToasts = () => {
       description: t('Errors.Toast.SignInToast.description'),
       variant: 'destructive',
       action: (
-        <Link href='/sign-in' className={buttonVariants({variant: 'outline', className: 'text-primary-foreground hover:bg-accent/20'})} onClick={() => dismiss()}>
+        <Link href='/auth/sign-in' className={buttonVariants({variant: 'outline', className: 'text-primary-foreground hover:bg-accent/20'})} onClick={() => dismiss()}>
           {t('CTA.sign-in')}
         </Link>
       ),

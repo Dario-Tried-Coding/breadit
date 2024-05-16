@@ -12,7 +12,7 @@ export const SignIn: FC<SignInProps> = ({ size, variant, className, ...props }) 
   const t = useTranslations('Auth.CTA')
 
   return (
-    <Link href='/sign-in' className={buttonVariants({ size, variant, className })} {...props}>
+    <Link href='/auth/sign-in' className={buttonVariants({ size, variant, className })} {...props}>
       {t('sign-in')}
     </Link>
   )

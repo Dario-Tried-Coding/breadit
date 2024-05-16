@@ -1,6 +1,5 @@
 import { Icons } from '@/components/Icons'
 import AuthForm from '@/components/auth/AuthForm'
-import { Locale } from '@/config/i18n.config'
 import { Link } from '@/lib/next-intl/navigation'
 import { getTranslations } from 'next-intl/server'
 import { FC } from 'react'
@@ -19,7 +18,7 @@ export const SignIn: FC<SignInProps> = async ({}) => {
       <p className='px-8 text-center text-sm text-muted-foreground'>
         {t.rich('sign-up', {
           link: (chunk) => (
-            <Link href='/sign-up' className='text-sm underline underline-offset-4 hover:text-foreground'>
+            <Link href='/auth/sign-up' className='text-sm underline underline-offset-4 hover:text-foreground'>
               {chunk}
             </Link>
           ),
