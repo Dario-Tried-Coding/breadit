@@ -1,3 +1,4 @@
+import GeneralFeed from '@/components/feed/GeneralFeed'
 import { Feed } from '@/components/pages/Feed'
 import { buttonVariants } from '@/components/ui/Button'
 import { Locale } from '@/config/i18n.config'
@@ -23,7 +24,7 @@ const page: FC<pageProps> = async ({ params: { locale } }) => {
     <Feed className='mt-8'>
       <H1>{t('heading')}</H1>
       <Layout>
-        <div className='col-span-2'>feed</div>
+        <GeneralFeed className='col-span-2' />
 
         <Info>
           <Info.Heading>

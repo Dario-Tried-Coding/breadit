@@ -1,4 +1,4 @@
-import { isUserPartOfSubreddit } from '@/lib/helpers/models'
+import { isUserPartOfSubreddit } from '@/lib/helpers/models/users'
 import { db } from '@/lib/prisma'
 import { authRouter } from '@/lib/trpc/routers/auth-router'
 import { commentCreationValidator, commentVotingValidator } from '@/lib/validators/comment'
@@ -6,8 +6,12 @@ import { postCreationValidator, postVotingValidator } from '@/lib/validators/pos
 import { subredditCreationValidator, subredditJoiningLeavingValidator } from '@/lib/validators/subreddit'
 import { TRPCError } from '@trpc/server'
 import { getTranslations } from 'next-intl/server'
-import { privateProcedure, router } from './init'
+import { privateProcedure, publicProcedure, router } from './init'
 import { redis } from '@/lib/redis'
+import { infiniteFeedValidator } from '@/lib/validators/feed'
+import { DEFAULT_INFINITE_QUERY_LIMIT } from '@/config'
+import { auth } from '@/lib/next-auth'
+import { getFeedPosts } from '@/lib/helpers/models/posts'
 
 export const appRouter = router({
   authRouter,
@@ -143,6 +147,16 @@ export const appRouter = router({
       await db.comment.create({ data: { authorId: userId, content, postId, replyToId } })
       return 'CREATED' as const
     }),
+  getPosts: publicProcedure.input(infiniteFeedValidator).query(async ({ ctx: { locale }, input: { cursor, limit, subredditName } }) => {
+    const t = await getTranslations({ locale, namespace: 'Index' })
+
+    const { posts, nextPost } = await getFeedPosts({ subredditName }, { limit, cursor })
+
+    let nextCursor: typeof cursor | null = null
+    nextCursor = nextPost?.id
+
+    return { posts, nextCursor }
+  }),
 })
 
 export type AppRouter = typeof appRouter

@@ -1,7 +1,7 @@
 'use client'
 
-import Vote from '@/components/post/CommentVote'
-import WriteComment from '@/components/post/WriteComment'
+import Vote from '@/components/comment/CommentVote'
+import WriteComment from '@/components/comment/WriteComment'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { useCustomToasts } from '@/hooks/use-custom-toasts'
@@ -23,7 +23,7 @@ const Comment: FC<CommentProps> = ({ comment, votesAmt, userVote, replyToId }) =
   const t = useTranslations('Components.Comment.Client.UI')
   const session = useSession()
 
-  const {signInToast} = useCustomToasts()
+  const { signInToast } = useCustomToasts()
 
   const [isReplying, setIsReplying] = useState(false)
 
@@ -37,7 +37,8 @@ const Comment: FC<CommentProps> = ({ comment, votesAmt, userVote, replyToId }) =
           </AvatarFallback>
         </Avatar>
         <p className='text-sm font-medium'>
-          {t('user-prefix')}{comment.author.username}&nbsp;•&nbsp;<span className='font-normal text-muted-foreground'>{comment.createdAt}</span>
+          {t('user-prefix')}
+          {comment.author.username}&nbsp;•&nbsp;<span className='font-normal text-muted-foreground'>{comment.createdAt}</span>
         </p>
       </div>
       <p className='mt-2 text-sm'>{comment.content}</p>

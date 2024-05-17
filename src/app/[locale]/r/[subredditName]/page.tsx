@@ -1,13 +1,15 @@
-import { sleep } from '@/helpers'
+import SubredditFeed from '@/components/feed/SubredditFeed'
+import { Locale } from '@/config/i18n.config'
 import { FC } from 'react'
 
-interface pageProps {}
+interface pageProps {
+  params: {
+    locale: Locale
+    subredditName: string
+  }
+}
 
-const page: FC<pageProps> = async ({ }) => {
-  await sleep(5000)
-
-  return (
-    <>page</>
-  )
+const page: FC<pageProps> = async ({ params: { locale, subredditName } }) => {
+  return <SubredditFeed subredditName={subredditName} />
 }
 export default page

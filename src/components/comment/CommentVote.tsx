@@ -1,6 +1,6 @@
 'use client'
 
-import Vote_UI from '@/components/post/Vote.ui'
+import Vote_UI from '@/components/Vote.ui'
 import { useCustomToasts } from '@/hooks/use-custom-toasts'
 import { useToast } from '@/hooks/use-toast'
 import { trpc } from '@/lib/trpc/trpc'

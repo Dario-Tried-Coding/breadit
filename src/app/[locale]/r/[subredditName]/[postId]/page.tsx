@@ -1,5 +1,5 @@
-import CommentsSection from '@/components/post/CommentsSection'
-import { Vote_Skeleton } from '@/components/post/Vote.ui'
+import CommentsSection from '@/components/comment/CommentsSection'
+import { Vote_Skeleton } from '@/components/Vote.ui'
 import PostVote from '@/components/post/post-vote/PostVote.server'
 import { Separator } from '@/components/ui/Separator'
 import { Locale } from '@/config/i18n.config'
