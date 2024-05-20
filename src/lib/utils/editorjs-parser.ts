@@ -1,8 +1,7 @@
 import { HeadingBlock, LinkBlock, TableBlock } from '@/types/utils/editor-js'
 
-
 export const headingParser = (block: HeadingBlock) => {
-  return `<h${block.data.level} class=''>${block.data.text}</h${block.data.level}>`
+  return `<h${block.data.level}>${block.data.text}</h${block.data.level}>`
 }
 
 export const linkParser = (block: LinkBlock) => {
@@ -21,7 +20,7 @@ export const tableParser = (block: TableBlock) => {
         .join('')}</thead>`
     }
 
-    return null
+    return ''
   }
   function createTableBody() {
     if (withHeadings) {
@@ -32,7 +31,7 @@ export const tableParser = (block: TableBlock) => {
       return `<tbody>${rows}</tbody>`
     }
 
-    const rows = content.map((row) => `<tr>${row.map((cell) => `<td>${cell}</td>`)}</tr>`).join('')
+    const rows = content.map((row) => `<tr>${row.map((cell) => `<td>${cell}</td>`).join('')}</tr>`).join('')
     return `<tbody>${rows}</tbody>`
   }
 

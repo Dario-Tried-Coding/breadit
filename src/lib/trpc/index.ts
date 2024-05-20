@@ -1,17 +1,16 @@
+import { getFeedPosts } from '@/lib/helpers/models/posts'
 import { isUserPartOfSubreddit } from '@/lib/helpers/models/users'
 import { db } from '@/lib/prisma'
+import { redis } from '@/lib/redis'
 import { authRouter } from '@/lib/trpc/routers/auth-router'
 import { commentCreationValidator, commentVotingValidator } from '@/lib/validators/comment'
+import { infiniteFeedValidator } from '@/lib/validators/feed'
 import { postCreationValidator, postVotingValidator } from '@/lib/validators/post'
 import { subredditCreationValidator, subredditJoiningLeavingValidator } from '@/lib/validators/subreddit'
+import { Subreddit } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { getTranslations } from 'next-intl/server'
 import { privateProcedure, publicProcedure, router } from './init'
-import { redis } from '@/lib/redis'
-import { infiniteFeedValidator } from '@/lib/validators/feed'
-import { DEFAULT_INFINITE_QUERY_LIMIT } from '@/config'
-import { auth } from '@/lib/next-auth'
-import { getFeedPosts } from '@/lib/helpers/models/posts'
 
 export const appRouter = router({
   authRouter,
@@ -148,9 +147,17 @@ export const appRouter = router({
       return 'CREATED' as const
     }),
   getPosts: publicProcedure.input(infiniteFeedValidator).query(async ({ ctx: { locale }, input: { cursor, limit, subredditName } }) => {
-    const t = await getTranslations({ locale, namespace: 'Index' })
+    const t = await getTranslations({ locale, namespace: 'Components.Feed' })
 
-    const { posts, nextPost } = await getFeedPosts({ subredditName }, { limit, cursor })
+    let subreddit: Subreddit | null = null
+    if (subredditName) {
+      const dbSubreddit = await db.subreddit.findFirst({ where: { name: subredditName } })
+      
+      if (!dbSubreddit) throw new TRPCError({ code: 'NOT_FOUND', message: t('Server.Errors.subreddit-not-found') })
+      subreddit = dbSubreddit
+    }
+
+    const { posts, nextPost } = await getFeedPosts(locale, { subredditName: subreddit?.name }, { limit, cursor })
 
     let nextCursor: typeof cursor | null = null
     nextCursor = nextPost?.id

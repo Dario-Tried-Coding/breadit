@@ -1,5 +1,6 @@
-import CommentsSection from '@/components/comment/CommentsSection'
+import EditorOutput from '@/components/EditorOutput'
 import { Vote_Skeleton } from '@/components/Vote.ui'
+import CommentsSection from '@/components/comment/CommentsSection'
 import PostVote from '@/components/post/post-vote/PostVote.server'
 import { Separator } from '@/components/ui/Separator'
 import { Locale } from '@/config/i18n.config'
@@ -10,7 +11,6 @@ import { db } from '@/lib/prisma'
 import { redis } from '@/lib/redis'
 import { formatTimeToNow } from '@/lib/utils/date-fns'
 import { CachedPost } from '@/types/utils/redis'
-import { Interweave } from 'interweave'
 import { Loader2 } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { FC, Suspense } from 'react'
@@ -55,7 +55,7 @@ const page: FC<pageProps> = async ({ params: { locale, subredditName, postId } }
           {t('Post.posted-by', { username: post.authorUsername })}&nbsp;•&nbsp;{formatTimeToNow(new Date(post.createdAt), locale)}
         </p>
         <h1 className='py-2 text-xl font-semibold leading-6'>{post.title}</h1>
-        <Interweave content={post.content} />
+        <EditorOutput parsedOutput={post.content} />
         <Suspense fallback={<Loader2 className='mt-4 h-5 w-5 animate-spin' />}>
           <Separator className='mt-12' />
           <CommentsSection locale={locale} postId={postId} className='mt-4' />

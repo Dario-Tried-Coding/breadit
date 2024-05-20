@@ -335,6 +335,13 @@
     "Voting": {
       "upvote": "Vota positivamente",
       "downvote": "Vota negativamente"
+    },
+    "Feed": {
+      "Server": {
+        "Errors": {
+          "subreddit-not-found": "La community con il nome fornito non esiste."
+        }
+      }
     }
   }
 }

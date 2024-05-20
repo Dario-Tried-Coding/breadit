@@ -1,6 +1,8 @@
 import { DEFAULT_INFINITE_QUERY_LIMIT } from '@/config'
+import { Locale } from '@/config/i18n.config'
 import { auth } from '@/lib/next-auth'
 import { db } from '@/lib/prisma'
+import { formatTimeToNow } from '@/lib/utils/date-fns'
 
 interface ClientOpts {
   subredditName?: string | null
@@ -9,7 +11,7 @@ interface QueryOpts {
   limit?: number | null
   cursor?: string | null
 }
-export async function getFeedPosts(clientOpts?: ClientOpts | null, queryOpts?: QueryOpts | null) {
+export async function getFeedPosts(locale: Locale, clientOpts?: ClientOpts | null, queryOpts?: QueryOpts | null) {
   const subredditName = clientOpts?.subredditName
   const cursor = queryOpts?.cursor
   const limit = queryOpts?.limit
@@ -47,13 +49,25 @@ export async function getFeedPosts(clientOpts?: ClientOpts | null, queryOpts?: Q
     take,
     ...cursorSettings,
     where,
+    include: {
+      author: true,
+      subreddit: true,
+      votes: true,
+    },
     orderBy: {
       createdAt: 'desc',
     },
   })
 
-  const posts = postsPlusOne.length === take ? postsPlusOne.slice(0, take - 1) : postsPlusOne
-  const nextPost = postsPlusOne.length === take ? postsPlusOne.pop() : undefined
+  const posts = await Promise.all(
+    (postsPlusOne.length === take ? postsPlusOne.slice(0, take - 1) : postsPlusOne).map(async (p) => ({
+      ...p,
+      createdAt: await formatTimeToNow(p.createdAt, locale),
+    }))
+  )
 
-  return { posts, nextPost }
+  const nextPost = postsPlusOne.length === take ? postsPlusOne.pop() : undefined
+  const strigifiedCreatedAt = nextPost ? await formatTimeToNow(nextPost?.createdAt, locale) : ''
+
+  return { posts, nextPost: nextPost ? { ...nextPost, createdAt: strigifiedCreatedAt } : undefined }
 }
