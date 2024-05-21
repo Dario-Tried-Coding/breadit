@@ -9,7 +9,7 @@ interface pageProps {
   }
 }
 
-const page: FC<pageProps> = async ({ params: { locale, subredditName } }) => {
+const page: FC<pageProps> = async ({ params: { subredditName } }) => {
   return <SubredditFeed subredditName={subredditName} />
 }
 export default page

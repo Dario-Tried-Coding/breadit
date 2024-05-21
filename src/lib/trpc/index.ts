@@ -6,7 +6,7 @@ import { authRouter } from '@/lib/trpc/routers/auth-router'
 import { commentCreationValidator, commentVotingValidator } from '@/lib/validators/comment'
 import { infiniteFeedValidator } from '@/lib/validators/feed'
 import { postCreationValidator, postVotingValidator } from '@/lib/validators/post'
-import { subredditCreationValidator, subredditJoiningLeavingValidator } from '@/lib/validators/subreddit'
+import { subredditCreationValidator, subredditJoiningLeavingValidator, subredditSearchValidator } from '@/lib/validators/subreddit'
 import { Subreddit } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { getTranslations } from 'next-intl/server'
@@ -174,6 +174,10 @@ export const appRouter = router({
     await db.user.update({ where: { id: userId }, data: { username } })
     return 'UPDATED' as const
   }),
+  searchSubreddit: publicProcedure.input(subredditSearchValidator).query(async ({ input: { subredditName } }) => {
+    const subreddits = await db.subreddit.findMany({ where: { name: { contains: subredditName } }, take: 5 })
+    return subreddits
+  })
 })
 
 export type AppRouter = typeof appRouter

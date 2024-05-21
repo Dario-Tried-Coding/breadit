@@ -9,3 +9,8 @@ export const subredditJoiningLeavingValidator = z.object({
   subredditId: z.string()
 })
 export type SubredditJoiningLeavingPayload = z.infer<typeof subredditJoiningLeavingValidator>
+
+export const subredditSearchValidator = z.object({
+  subredditName: z.string(),
+})
+export type SubredditSearchPayload = z.infer<typeof subredditSearchValidator>

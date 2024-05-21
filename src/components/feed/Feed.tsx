@@ -51,7 +51,7 @@ const Feed: FC<FeedProps> = ({ subredditName, initialPosts, className, children,
     )
   
   const posts = postsPages?.pages.flatMap((p) => p.posts)
-  if (posts?.length === 0) return null
+  if (posts?.length === 0) return children
 
   return (
     <ul className={cn('flex flex-col gap-4', className)} {...rest}>

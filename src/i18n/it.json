@@ -394,6 +394,11 @@
     "Post": {
       "subreddit": "r/{subredditName}",
       "posted-by": "Pubblicato da u/{username}"
+    },
+    "SearchBar": {
+      "placeholder": "Cerca community...",
+      "subreddit-prefix": "r/",
+      "empty": "Nessuna community trovata."
     }
   }
 }
