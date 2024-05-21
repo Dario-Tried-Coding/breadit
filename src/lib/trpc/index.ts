@@ -11,6 +11,7 @@ import { Subreddit } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { getTranslations } from 'next-intl/server'
 import { privateProcedure, publicProcedure, router } from './init'
+import { usernameChangeValidator } from '@/lib/validators/user'
 
 export const appRouter = router({
   authRouter,
@@ -152,7 +153,7 @@ export const appRouter = router({
     let subreddit: Subreddit | null = null
     if (subredditName) {
       const dbSubreddit = await db.subreddit.findFirst({ where: { name: subredditName } })
-      
+
       if (!dbSubreddit) throw new TRPCError({ code: 'NOT_FOUND', message: t('Server.Errors.subreddit-not-found') })
       subreddit = dbSubreddit
     }
@@ -163,6 +164,15 @@ export const appRouter = router({
     nextCursor = nextPost?.id
 
     return { posts, nextCursor }
+  }),
+  changeUsername: privateProcedure.input(usernameChangeValidator).mutation(async ({ ctx: { locale, userId }, input: { username } }) => {
+    const t = await getTranslations({ locale, namespace: 'Pages.Settings.Server' })
+
+    const existingUser = await db.user.findFirst({ where: { username } })
+    if (existingUser) throw new TRPCError({ code: 'CONFLICT', message: t('Errors.username-already-exists') })
+
+    await db.user.update({ where: { id: userId }, data: { username } })
+    return 'UPDATED' as const
   }),
 })
 

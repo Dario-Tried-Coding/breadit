@@ -114,6 +114,50 @@
           }
         }
       }
+    },
+    "Settings": {
+      "Zod": {
+        "Username": {
+          "too-long": "Il nome utente non può superare i 21 caratteri.",
+          "too-short": "Il nome utente deve avere almeno 3 caratteri.",
+          "no-spaces": "Il nome utente non può contenere spazi."
+        }
+      },
+      "Server": {
+        "Errors": {
+          "username-already-exists": "Il nome utente è già in uso. Per favore, scegli un altro nome utente."
+        }
+      },
+      "Client": {
+        "Toasts": {
+          "Success": {
+            "title": "Nome utente aggiornato!",
+            "description": "Il tuo nome utente è stato aggiornato con successo."
+          },
+          "UsernameAlreadyExists": {
+            "title": "Nome utente già in uso",
+            "description": "Il nome utente è già in uso. Per favore, scegli un altro nome utente."
+          },
+          "GenericError": {
+            "title": "Qualcosa è andato storto",
+            "description": "Si è verificato un errore durante l'aggiornamento del nome utente. Riprova più tardi."
+          }
+        },
+        "UI": {
+          "heading": "Impostazioni",
+          "Fields": {
+            "Username": {
+              "label": "Nome utente",
+              "description": "Il tuo nome utente sarà visibile a tutti gli utenti di Breadit.",
+              "placeholder": "Inserisci il tuo nuovo nome utente..."
+            }
+          },
+          "Buttons": {
+            "submit": "Salva",
+            "saving": "Salvataggio..."
+          }
+        }
+      }
     }
   },
   "Components": {
