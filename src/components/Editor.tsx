@@ -245,7 +245,7 @@ const Editor: FC<EditorProps> = ({ subreddit: { id: subredditId, name: subreddit
         },
       })
     }
-  }, [])
+  }, [clearErrors, setValue, t])
 
   // Initialize editor on mount
   useEffect(() => {

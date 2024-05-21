@@ -8,7 +8,7 @@ import { REDIRECT_URL_COOKIE } from '@/config/auth.config'
 
 interface layoutProps extends PropsWithChildren {}
 
-const layout: FC<layoutProps> = ({ children }) => {
+const Layout: FC<layoutProps> = ({ children }) => {
   const router = useRouter()
   const redirectUrl = parseCookies()[REDIRECT_URL_COOKIE]
 
@@ -21,4 +21,4 @@ const layout: FC<layoutProps> = ({ children }) => {
   )
 }
 
-export default layout
+export default Layout

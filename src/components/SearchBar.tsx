@@ -30,7 +30,7 @@ const SearchBar: FC<SearchBarProps> = ({ initialSubreddits }) => {
   } = trpc.searchSubreddit.useQuery({ subredditName: input }, { enabled: false, initialData: initialSubreddits })
 
   const refetchFn = useDebouncedCallback(async () => refetch(), 300)
-  const debouncedRefetchFn = useCallback(() => refetchFn(), [])
+  const debouncedRefetchFn = useCallback(() => refetchFn(), [refetchFn])
 
   const ref = useClickOutside(() => setIsOpen(false))
 

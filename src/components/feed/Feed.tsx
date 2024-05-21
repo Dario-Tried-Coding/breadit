@@ -21,10 +21,6 @@ const Feed: FC<FeedProps> = ({ subredditName, initialPosts, className, children,
   const { data: session } = useSession()
   const { ref, entry } = useIntersection<HTMLLIElement>()
 
-  useEffect(() => {
-    if (entry?.isIntersecting) fetchNextPage()
-  }, [entry])
-
   const {
     data: postsPages,
     hasNextPage,
@@ -48,8 +44,12 @@ const Feed: FC<FeedProps> = ({ subredditName, initialPosts, className, children,
           }
         : undefined,
     }
-    )
-  
+  )
+
+  useEffect(() => {
+    if (entry?.isIntersecting) fetchNextPage()
+  }, [entry, fetchNextPage])
+
   const posts = postsPages?.pages.flatMap((p) => p.posts)
   if (posts?.length === 0) return children
 

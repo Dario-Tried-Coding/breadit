@@ -19,7 +19,7 @@ import { ZodError } from 'zod'
 
 interface pageProps {}
 
-const page: FC<pageProps> = ({}) => {
+const Page: FC<pageProps> = ({}) => {
   const t = useTranslations('Pages.r.Create')
   const router = useRouter()
   const { toast } = useToast()
@@ -111,4 +111,4 @@ const page: FC<pageProps> = ({}) => {
   )
 }
 
-export default page
+export default Page
