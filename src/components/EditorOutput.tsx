@@ -15,7 +15,7 @@ const EditorOutput: FC<EditorOutputProps> = ({ className, ...rest }) => {
     content = parsedContent
   }
 
-  return <Interweave content={content} className={cn('prose prose-sm', className)} {...rest} />
+  return <Interweave content={content} className={cn('prose prose-sm block', className)} {...rest} />
 }
 
 export default EditorOutput

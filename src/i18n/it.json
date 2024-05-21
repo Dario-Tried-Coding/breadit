@@ -342,6 +342,14 @@
           "subreddit-not-found": "La community con il nome fornito non esiste."
         }
       }
+    },
+    "MiniCreatePost": {
+      "placeholder": "Scrivi un post...",
+      "alt":"Avatar dell'utente"
+    },
+    "Post": {
+      "subreddit": "r/{subredditName}",
+      "posted-by": "Pubblicato da u/{username}"
     }
   }
 }
