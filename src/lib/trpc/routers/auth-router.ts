@@ -1,4 +1,3 @@
-import { DEFAULT_REDIRECT_URL } from '@/config/auth.config'
 import { signIn } from '@/lib/next-auth'
 import { publicProcedure, router } from '@/lib/trpc/init'
 import { SignInValidator } from '@/lib/validators/auth'
