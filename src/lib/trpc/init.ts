@@ -1,4 +1,4 @@
-import { getAuthSession } from '@/lib/next-auth/cache'
+import { auth } from '@/lib/next-auth'
 import { Context } from '@/lib/trpc/context'
 import { TRPCError, initTRPC } from '@trpc/server'
 import { getTranslations } from 'next-intl/server'
@@ -10,7 +10,7 @@ const t = initTRPC.context<Context>().create({
 const middleware = t.middleware
 
 const isAuth = middleware(async (opts) => {
-  const session = await getAuthSession()
+  const session = await auth()
   const t = await getTranslations({ locale: opts.ctx.locale })
 
   if (!session || !session.user) {
