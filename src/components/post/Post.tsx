@@ -30,7 +30,7 @@ const Post: FC<PostProps> = ({ votesAmt, voteType, subredditName, post, postRef 
   )
 
   return (
-    <li ref={handleRef} className='flex justify-between gap-2 rounded-md bg-card py-4 pl-2 pr-6 shadow sm:gap-6 sm:px-6'>
+    <li ref={handleRef} className='flex justify-between items-start gap-2 rounded-md bg-card py-4 pl-2 pr-6 shadow sm:gap-6 sm:px-6'>
       <PostVote_Client initialVotesAmt={votesAmt} initialVote={voteType} postId={post.id} className='flex-col-reverse gap-4' />
       <div className='relative max-h-60 flex-1 overflow-clip'>
         <div className='text-sm text-muted-foreground'>

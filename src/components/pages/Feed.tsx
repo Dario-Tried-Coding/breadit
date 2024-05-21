@@ -28,7 +28,7 @@ const Heading: Heading = { H1, H3 }
 interface LayoutProps extends PropsWithChildren, HTMLAttributes<HTMLDivElement> {}
 const Layout: FC<LayoutProps> = ({ children, className, ...props }) => {
   return (
-    <div className={cn('grid grid-cols-1 gap-y-6 py-6 md:grid-cols-3 md:gap-x-4', className)} {...props}>
+    <div className={cn('grid grid-cols-1 gap-y-4 py-6 md:grid-cols-3 md:gap-x-4', className)} {...props}>
       {children}
     </div>
   )

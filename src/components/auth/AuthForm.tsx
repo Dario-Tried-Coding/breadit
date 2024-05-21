@@ -23,7 +23,7 @@ const AuthForm: FC<AuthFormProps> = ({ className, ...props }) => {
     onError(error) {
       toast({
         title: t('Errors.Toast.title'),
-        description: error.message,
+        description: t('Errors.Toast.description'),
         variant: 'destructive',
       })
     },

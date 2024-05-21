@@ -14,6 +14,7 @@
       "social-auth-error": "Non è stato possibile eseguire l'accesso con {provider}.",
       "Toast": {
         "title": "C'è stato un errore",
+        "description": "Si è verificato un errore durante il tentativo di accesso. Riprova più tardi.",
         "SignInToast": {
           "title": "Accesso richiesto",
           "description": "Devi eseguire l'accesso per eseguire questa azione."
