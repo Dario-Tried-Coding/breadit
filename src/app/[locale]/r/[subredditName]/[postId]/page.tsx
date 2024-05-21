@@ -37,7 +37,7 @@ const page: FC<pageProps> = async ({ params: { locale, subredditName, postId } }
     post = constructCachedPost(dbPost)
 
     const votesAmt = post.votesAmt
-    if (votesAmt > 0) await redis.hset(`post:${postId}`, post)
+    // if (votesAmt > 0) await redis.hset(`post:${postId}`, post)
   } else {
     if (post.votesAmt <= 0) await redis.del(`post:${postId}`)
   }
