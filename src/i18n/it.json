@@ -72,6 +72,13 @@
           "cancel": "Annulla",
           "submit": "Crea community"
         },
+        "Zod": {
+          "Name": {
+            "too-long": "Il nome della community non può superare i 21 caratteri.",
+            "too-short": "Il nome della community deve avere almeno 3 caratteri.",
+            "no-spaces": "Il nome della community non può contenere spazi."
+          }
+        },
         "Server": {
           "Errors": {
             "subreddit-already-exists": "Esiste già una community questo nome. Per favore, prova con un altro nome."
@@ -390,7 +397,7 @@
     },
     "MiniCreatePost": {
       "placeholder": "Scrivi un post...",
-      "alt":"Avatar dell'utente"
+      "alt": "Avatar dell'utente"
     },
     "Post": {
       "subreddit": "r/{subredditName}",

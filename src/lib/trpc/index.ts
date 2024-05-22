@@ -175,9 +175,9 @@ export const appRouter = router({
     return 'UPDATED' as const
   }),
   searchSubreddit: publicProcedure.input(subredditSearchValidator).query(async ({ input: { subredditName } }) => {
-    const subreddits = await db.subreddit.findMany({ where: { name: { contains: subredditName } }, take: 5 })
+    const subreddits = await db.subreddit.findMany({ where: { name: { contains: subredditName, mode: 'insensitive' } }, take: 5 })
     return subreddits
-  })
+  }),
 })
 
 export type AppRouter = typeof appRouter

@@ -1,14 +1,14 @@
 'use client'
 
+import Card from '@/components/pages/Card'
 import { Button } from '@/components/ui/Button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
 import { Separator } from '@/components/ui/Separator'
 import { useCustomToasts } from '@/hooks/use-custom-toasts'
 import { useToast } from '@/hooks/use-toast'
 import { trpc } from '@/lib/trpc/trpc'
-import { SubredditCreationPayload, subredditCreationValidator } from '@/lib/validators/subreddit'
+import { SUBREDDIT_CREATION_I18N_KEYS, SUBREDDIT_CREATION_I18N_PATH, SubredditCreationPayload, subredditCreationValidator } from '@/lib/validators/subreddit'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
@@ -21,6 +21,8 @@ interface pageProps {}
 
 const Page: FC<pageProps> = ({}) => {
   const t = useTranslations('Pages.r.Create')
+  const zodT = useTranslations(SUBREDDIT_CREATION_I18N_PATH)
+
   const router = useRouter()
   const { toast } = useToast()
   const { signInToast } = useCustomToasts()
@@ -70,41 +72,41 @@ const Page: FC<pageProps> = ({}) => {
 
   return (
     <Form {...form}>
-      <Card className='mx-auto mt-8 max-w-4xl p-4'>
+      <Card>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <CardHeader className='p-0 pb-6 pt-2'>
-            <CardTitle>{t('heading')}</CardTitle>
-          </CardHeader>
-          <Separator />
-          <CardContent className='p-0 pt-4'>
+          <Card.Header>
+            <Card.Header.Title>{t('heading')}</Card.Header.Title>
+          </Card.Header>
+          <Card.Separator />
+          <Card.Content>
             <FormField
               control={form.control}
               name='name'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className='flex flex-col'>
-                    <span className='text-lg'>{t('Fields.Name.label')}</span>
-                    <span className='text-xs font-normal text-muted-foreground'>{t('Fields.Name.description')}</span>
-                  </FormLabel>
+                  <Card.Form.Label className='flex flex-col'>
+                    <Card.Form.Label.Name>{t('Fields.Name.label')}</Card.Form.Label.Name>
+                    <Card.Form.Label.Description>{t('Fields.Name.description')}</Card.Form.Label.Description>
+                  </Card.Form.Label>
                   <FormControl>
                     <div className='relative'>
                       <span className='absolute inset-y-0 left-0 grid w-8 place-items-center text-sm text-foreground-400'>r/</span>
                       <Input disabled={isPending} className='pl-6' {...field} />
                     </div>
                   </FormControl>
-                  <FormMessage className='text-destructive-400' />
+                  {form.formState.errors.name && <Card.Form.Message>{zodT(form.formState.errors.name.message as SUBREDDIT_CREATION_I18N_KEYS)}</Card.Form.Message>}
                 </FormItem>
               )}
             />
-          </CardContent>
-          <CardFooter className='flex justify-end gap-4 p-0 pt-4'>
+          </Card.Content>
+          <Card.Footer>
             <Button type='button' variant='secondary' disabled={isPending} onClick={() => router.back()}>
               {t('Footer.cancel')}
             </Button>
-            <Button type='submit' disabled={isPending || !form.formState.isValid} isLoading={isPending}>
+            <Button type='submit' disabled={isPending} isLoading={isPending}>
               {t('Footer.submit')}
             </Button>
-          </CardFooter>
+          </Card.Footer>
         </form>
       </Card>
     </Form>
