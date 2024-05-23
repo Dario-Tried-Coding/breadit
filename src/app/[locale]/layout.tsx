@@ -8,6 +8,7 @@ import { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { Inter } from 'next/font/google'
 import { polyfill } from 'interweave-ssr';
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Inter({ subsets: ['latin'] })
 
