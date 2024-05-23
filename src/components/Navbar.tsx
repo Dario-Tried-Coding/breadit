@@ -4,7 +4,6 @@ import UserAccountNav from '@/components/UserAccountNav'
 import { AuthLinks } from '@/components/auth/AuthLinks'
 import { getAuthSession } from '@/lib/next-auth/cache'
 import { Link } from '@/lib/next-intl/navigation'
-import { db } from '@/lib/prisma'
 import { getTranslations } from 'next-intl/server'
 import { FC } from 'react'
 
@@ -13,11 +12,6 @@ interface NavbarProps {}
 const Navbar: FC<NavbarProps> = async ({}) => {
   const session = await getAuthSession()
   const t = await getTranslations()
-
-  const subreddits = await db.subreddit.findMany({
-    take: 5,
-    orderBy: { subscribers: { _count: 'desc' } },
-  })
 
   return (
     <div className='fixed inset-x-0 top-0 z-10 h-12 border-b bg-background-100'>
@@ -28,7 +22,7 @@ const Navbar: FC<NavbarProps> = async ({}) => {
         </Link>
 
         <div className='my-1.5 flex max-w-2xl flex-1 items-start self-stretch'>
-          <SearchBar initialSubreddits={subreddits} />
+          <SearchBar />
         </div>
 
         {session?.user ? <UserAccountNav user={session.user} /> : <AuthLinks.SignIn size='sm' />}

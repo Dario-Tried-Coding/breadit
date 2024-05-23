@@ -10,11 +10,9 @@ import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { FC, useCallback, useEffect, useState } from 'react'
 
-interface SearchBarProps {
-  initialSubreddits: Subreddit[]
-}
+interface SearchBarProps {}
 
-const SearchBar: FC<SearchBarProps> = ({ initialSubreddits }) => {
+const SearchBar: FC<SearchBarProps> = ({}) => {
   const t = useTranslations('Components.SearchBar')
 
   const router = useRouter()
@@ -27,7 +25,7 @@ const SearchBar: FC<SearchBarProps> = ({ initialSubreddits }) => {
     data: subreddits,
     isFetching,
     refetch,
-  } = trpc.searchSubreddit.useQuery({ subredditName: input }, { enabled: false, initialData: initialSubreddits })
+  } = trpc.searchSubreddit.useQuery({ subredditName: input })
 
   const refetchFn = useDebouncedCallback(async () => refetch(), 300)
   const debouncedRefetchFn = useCallback(() => refetchFn(), [refetchFn])
