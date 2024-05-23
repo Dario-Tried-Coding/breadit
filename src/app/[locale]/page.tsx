@@ -14,7 +14,7 @@ interface pageProps {
   }
 }
 
-const page: FC<pageProps> = ({ params: { } }) => {
+const Page: FC<pageProps> = ({ params: { } }) => {
   const t = useTranslations('Pages.Home')
 
   const { H1 } = Feed.Heading
@@ -51,4 +51,4 @@ const page: FC<pageProps> = ({ params: { } }) => {
   )
 }
 
-export default page
+export default Page
