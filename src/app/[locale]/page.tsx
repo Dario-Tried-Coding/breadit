@@ -4,6 +4,7 @@ import { buttonVariants } from '@/components/ui/Button'
 import { Locale } from '@/config/i18n.config'
 import { Link } from '@/lib/next-intl/navigation'
 import { HomeIcon } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 import { FC } from 'react'
 
@@ -13,8 +14,8 @@ interface pageProps {
   }
 }
 
-const page: FC<pageProps> = async ({ params: { locale } }) => {
-  const t = await getTranslations({ locale, namespace: 'Pages.Home' })
+const page: FC<pageProps> = ({ params: { } }) => {
+  const t = useTranslations('Pages.Home')
 
   const { H1 } = Feed.Heading
   const Layout = Feed.Layout
