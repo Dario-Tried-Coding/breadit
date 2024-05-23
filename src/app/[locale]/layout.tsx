@@ -12,6 +12,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Inter({ subsets: ['latin'] })
 
+
 polyfill()
 
 type Props = {
@@ -40,6 +41,7 @@ export default function RootLayout({ children, authModal, params: { locale } }: 
           <div className='container pt-12 md:px-8'>
             {authModal}
             {children}
+            <SpeedInsights />
           </div>
         </Providers>
       </body>
