@@ -1,10 +1,10 @@
 'use client'
 
-import { Dialog, DialogContent, DialogHeader } from '@/components/ui/Dialog'
-import { FC, PropsWithChildren } from 'react'
+import { Dialog, DialogContent } from '@/components/ui/Dialog'
+import { REDIRECT_URL_COOKIE } from '@/config/auth.config'
 import { useRouter } from 'next/navigation'
 import { parseCookies } from 'nookies'
-import { REDIRECT_URL_COOKIE } from '@/config/auth.config'
+import { FC, PropsWithChildren } from 'react'
 
 interface layoutProps extends PropsWithChildren {}
 
