@@ -12,7 +12,6 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Inter({ subsets: ['latin'] })
 
-
 polyfill()
 
 type Props = {
